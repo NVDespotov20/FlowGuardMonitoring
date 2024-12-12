@@ -5,6 +5,8 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+        <CodeAnalysisRuleSet>../FlowGuardMonitoring.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
 
@@ -23,6 +25,21 @@
     <ItemGroup>
       <ProjectReference Include="..\FlowGuardMonitoring.BLL\FlowGuardMonitoring.BLL.csproj" />
       <ProjectReference Include="..\FlowGuardMonitoring.DAL\FlowGuardMonitoring.DAL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\AuthLocals.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Authentication.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\AuthLocals.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>AuthLocals.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>

@@ -1,19 +1,41 @@
+using FlowGuardMonitoring.WebHost.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowGuardMonitoring.WebHost.Controllers;
-[Route("auth")]
 public class AuthenticationController : Controller
 {
-    // GET
-    [HttpGet("login")]
+    [HttpGet("/login")]
     public IActionResult Login()
     {
-        return View();
+        return this.View();
     }
-    // GET
-    [HttpGet("register")]
+
+    [HttpPost("/login")]
+    [ValidateAntiForgeryToken]
+    public IActionResult Login(LoginViewModel model)
+    {
+        if (this.ModelState.IsValid)
+        {
+           // test
+        }
+
+        return this.View(model);
+    }
+
+    [HttpGet("/register")]
     public IActionResult Register()
     {
-        return View();
+        return this.View();
+    }
+
+    [HttpPost("/register")]
+    public IActionResult Register(RegisterViewModel model)
+    {
+        if (this.ModelState.IsValid)
+        {
+            // test
+        }
+
+        return this.View(model);
     }
 }

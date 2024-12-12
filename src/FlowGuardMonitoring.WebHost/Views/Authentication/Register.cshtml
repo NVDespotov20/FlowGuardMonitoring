@@ -1,3 +1,5 @@
+@using FlowGuardMonitoring.WebHost.Resources
+@model RegisterViewModel
 @{
     Layout = "_AuthLayout";
 }
@@ -6,28 +8,40 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-center">Register</h3>
+                    <h3 class="text-center">@AuthLocals.RegisterTitle</h3>
                 </div>
                 <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" placeholder="Enter Username">
+                    <form asp-action="Register" method="post">
+                        <div class="form-group mt-3">
+                            <label for="email">@AuthLocals.EmailLabel</label>
+                            <input type="email"
+                                   asp-for="Email"
+                                   class="form-control"
+                                   id="email"
+                                   placeholder="@AuthLocals.EmailPlaceholder">
+
+                            <span class="text-danger text-small mt-3" asp-validation-for="Email"></span>
                         </div>
                         <div class="form-group mt-3">
-                            <label for="email">Email Address</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter Email">
+                            <label for="password">@AuthLocals.PasswordLabel</label>
+                            <input type="password"
+                                   asp-for="Password"
+                                   class="form-control"
+                                   id="password"
+                                   placeholder="@AuthLocals.PasswordPlaceholder">
+                            <span class="text-danger text-small mt-3" asp-validation-for="Password"></span>
                         </div>
                         <div class="form-group mt-3">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Enter Password">
-                        </div>
-                        <div class="form-group mt-3">
-                            <label for="confirmPassword">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                            <label for="confirmPassword">@AuthLocals.ConfirmPassLabel</label>
+                            <input type="password"
+                                   asp-for="ConfirmPassword"
+                                   class="form-control"
+                                   id="confirmPassword"
+                                   placeholder="@AuthLocals.ConfirmPassPlaceholder">
+                            <span class="text-danger text-small mt-3" asp-validation-for="ConfirmPassword"></span>
                         </div>
                         <div class="d-grid gap-2 mt-3">
-                            <button type="submit" class="btn btn-primary">Register</button>
+                            <button type="submit" class="btn btn-primary">@AuthLocals.RegisterTitle</button>
                         </div>
                     </form>
                 </div>

@@ -11,23 +11,23 @@ namespace FlowGuardMonitoring.BLL.Services;
 
 public class EmailSenderService
 {
-    private readonly IOptions<EmailOptions> _options;
-    
+    private readonly IOptions<EmailOptions> options;
+
     public EmailSenderService(IOptions<EmailOptions> optionsAccessor)
     {
-        _options = optionsAccessor;
+        this.options = optionsAccessor;
     }
 
     public async Task<StandardResult> SendEmailAsync(EmailModel email)
     {
-        var options = _options.Value;
+        var options = this.options.Value;
         using var client = new SmtpClient(options.SmtpServer, options.Port);
-        
+
         client.UseDefaultCredentials = false;
         client.Credentials = new NetworkCredential(options.Username, options.Password);
         client.DeliveryMethod = SmtpDeliveryMethod.Network;
         client.EnableSsl = options.EnableSsl;
-        
+
         try
         {
             var mailMessage = new MailMessage(options.Username, email.Recipient);

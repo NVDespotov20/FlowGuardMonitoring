@@ -14,11 +14,11 @@ public class FlowGuardMonitoringContext : IdentityDbContext<User>
     public DbSet<Measurement> Measurements { get; set; }
     public DbSet<Sensor> Sensors { get; set; }
     public DbSet<Site> Sites { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-    
+
         modelBuilder.Entity<Measurement>()
             .HasKey(w => w.MeasurementId);
 
@@ -27,7 +27,7 @@ public class FlowGuardMonitoringContext : IdentityDbContext<User>
 
         modelBuilder.Entity<Site>()
             .HasKey(s => s.SiteId);
-    
+
         modelBuilder.Entity<Measurement>()
             .HasOne(m => m.Sensor)
             .WithMany(m => m.Measurements)
