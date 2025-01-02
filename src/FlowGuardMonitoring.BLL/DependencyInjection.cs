@@ -2,6 +2,7 @@
 using FlowGuardMonitoring.BLL.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Resend;
 
 namespace FlowGuardMonitoring.BLL;
 
@@ -13,6 +14,7 @@ public static class DependencyInjection
     {
         services.Configure<EmailOptions>(configuration.GetSection("Email"));
         services.AddTransient<EmailSenderService>();
+
         return services;
     }
 }

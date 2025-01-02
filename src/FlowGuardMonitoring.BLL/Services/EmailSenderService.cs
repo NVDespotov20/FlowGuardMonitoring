@@ -1,45 +1,39 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using Essentials.Results;
 using FlowGuardMonitoring.BLL.Models;
 using FlowGuardMonitoring.BLL.Options;
 using Microsoft.Extensions.Options;
+using Resend;
 
 namespace FlowGuardMonitoring.BLL.Services;
 
 public class EmailSenderService
 {
     private readonly IOptions<EmailOptions> options;
+    private readonly IResend resend;
 
-    public EmailSenderService(IOptions<EmailOptions> optionsAccessor)
+    public EmailSenderService(IOptions<EmailOptions> optionsAccessor, IResend resend)
     {
         this.options = optionsAccessor;
+        this.resend = resend;
     }
 
     public async Task<StandardResult> SendEmailAsync(EmailModel email)
     {
         var options = this.options.Value;
-        using var client = new SmtpClient(options.SmtpServer, options.Port);
-
-        client.UseDefaultCredentials = false;
-        client.Credentials = new NetworkCredential(options.Username, options.Password);
-        client.DeliveryMethod = SmtpDeliveryMethod.Network;
-        client.EnableSsl = options.EnableSsl;
-
-        try
+        var emailToSend = new EmailMessage
         {
-            var mailMessage = new MailMessage(options.Username, email.Recipient);
-            mailMessage.Subject = email.Subject;
-            mailMessage.Body = email.Body;
-            await client.SendMailAsync(mailMessage);
-            return StandardResult.SuccessfulResult();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error sending email: {ex.Message}");
-            return StandardResult.UnsuccessfulResult();
-        }
+            From = options.Username,
+            To = email.Recipient,
+            Subject = email.Subject,
+            HtmlBody = email.Body,
+        };
+        await this.resend.EmailSendAsync(emailToSend);
+        return StandardResult.SuccessfulResult();
     }
 }
