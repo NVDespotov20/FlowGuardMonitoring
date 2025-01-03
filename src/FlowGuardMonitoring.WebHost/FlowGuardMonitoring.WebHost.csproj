@@ -30,7 +30,7 @@
     <ItemGroup>
       <EmbeddedResource Update="Resources\AuthLocals.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Authentication.Designer.cs</LastGenOutput>
+        <LastGenOutput>AuthLocals.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 

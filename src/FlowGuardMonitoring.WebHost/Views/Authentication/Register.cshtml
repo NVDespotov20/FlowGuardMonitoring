@@ -13,6 +13,26 @@
                 <div class="card-body">
                     <form asp-action="Register" method="post">
                         <div class="form-group mt-3">
+                            <label for="firstName">@AuthLocals.FirstNameLabel</label>
+                            <input type="text"
+                                   asp-for="FirstName"
+                                   class="form-control"
+                                   id="firstName"
+                                   placeholder="@AuthLocals.FirstNamePlaceholder">
+                            <span class="text-danger text-small mt-3" asp-validation-for="FirstName"></span>
+                        </div>
+
+                        <!-- Last Name Field -->
+                        <div class="form-group mt-3">
+                            <label for="lastName">@AuthLocals.LastNameLabel</label>
+                            <input type="text"
+                                   asp-for="LastName"
+                                   class="form-control"
+                                   id="lastName"
+                                   placeholder="@AuthLocals.LastNamePlaceholder">
+                            <span class="text-danger text-small mt-3" asp-validation-for="LastName"></span>
+                        </div>
+                        <div class="form-group mt-3">
                             <label for="email">@AuthLocals.EmailLabel</label>
                             <input type="email"
                                    asp-for="Email"

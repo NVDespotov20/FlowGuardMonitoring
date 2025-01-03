@@ -23,4 +23,21 @@
       </PackageReference>
     </ItemGroup>
 
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\EmailLocals.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>EmailLocales.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Compile Update="Resources\EmailLocals.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>EmailLocals.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

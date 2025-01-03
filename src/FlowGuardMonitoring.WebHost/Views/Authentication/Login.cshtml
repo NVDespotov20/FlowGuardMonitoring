@@ -1,8 +1,10 @@
+@using FlowGuardMonitoring.WebHost.Extentions
 @using FlowGuardMonitoring.WebHost.Resources
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model LoginViewModel
 @{
     Layout = "_AuthLayout";
+    var globalError = this.ViewContext.ModelState.GetFirstGlobalError();
 }
 
 <div class="container mt-5">
@@ -13,6 +15,12 @@
                     <h3 class="text-center">@AuthLocals.LoginTitle</h3>
                 </div>
                 <div class="card-body">
+                    @if (!string.IsNullOrWhiteSpace(globalError))
+                    {
+                        <span class="d-block text-small alert alert-danger">
+                            @globalError
+                        </span>
+                    }
                     <form asp-action="Login" method="post">
                         <div class="form-group">
                             <label for="email">@AuthLocals.EmailLabel</label>
@@ -43,6 +51,9 @@
                             <button type="submit" class="btn btn-success">@AuthLocals.LoginTitle</button>
                         </div>
                     </form>
+                    <div class="text-small mt-2 text-center">
+                        <a href="@Url.Action("ForgotPassword")">@AuthLocals.ForgotPasswordText</a>
+                    </div>
                 </div>
             </div>
         </div>

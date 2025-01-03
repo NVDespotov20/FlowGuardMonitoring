@@ -57,4 +57,64 @@
     <data name="EmailFieldInvalidErrorMsg" xml:space="preserve">
         <value>Имейлът е в невалиден формат</value>
     </data>
+    <data name="ForgotPasswordText" xml:space="preserve">
+        <value>Забравена парола?</value>
+    </data>
+    <data name="ForgotPasswordTitle" xml:space="preserve">
+        <value>Забравена парола</value>
+    </data>
+    <data name="ForgotPasswordBtn" xml:space="preserve">
+        <value>Възтановяване на паролата</value>
+    </data>
+    <data name="ResetPasswordTitle" xml:space="preserve">
+        <value>Възтановяване на паролата</value>
+    </data>
+    <data name="NewPasswordLabel" xml:space="preserve">
+        <value>Нова парола</value>
+    </data>
+    <data name="NewPasswordPlaceholder" xml:space="preserve">
+        <value>Въведете нова парола</value>
+    </data>
+    <data name="InvalidLoginErrorMsg" xml:space="preserve">
+        <value>Неправилен имейл или парола</value>
+    </data>
+    <data name="UserLockedOutErrorMsg" xml:space="preserve">
+        <value>Профилът Ви е временно заключен</value>
+    </data>
+    <data name="RegisterSuccessMessage" xml:space="preserve">
+        <value>Регистрацията е успешна!</value>
+    </data>
+    <data name="PasswordTooShortErrorMsg" xml:space="preserve">
+        <value>Паролата трябва да е поне 8 символа</value>
+    </data>
+    <data name="PasswordRequiresNonAlphanumericErrorMsg" xml:space="preserve">
+        <value>Паролата трябва да съдържа символ</value>
+    </data>
+    <data name="PasswordRequiresLowerErrorMsg" xml:space="preserve">
+        <value>Паролата трябва да съдържа малка буква</value>
+    </data>
+    <data name="PasswordRequiresUpperErrorMsg" xml:space="preserve">
+        <value>Паролата трябва да съдържа голяма буква</value>
+    </data>
+    <data name="ForgotPasswordSuccessMessage" xml:space="preserve">
+        <value>Вашата заявка беше успешна. Моля проверете имейл адреса си за линк за промяна на парола.</value>
+    </data>
+    <data name="FirstNamePlaceholder" xml:space="preserve">
+        <value>Въведете име</value>
+    </data>
+    <data name="LastNameLabel" xml:space="preserve">
+        <value>Фамилия</value>
+    </data>
+    <data name="LastNamePlaceholder" xml:space="preserve">
+        <value>Въведете фамилия</value>
+    </data>
+    <data name="FirstNameLabel" xml:space="preserve">
+        <value>Име</value>
+    </data>
+    <data name="FirstNameRequiredErrorMsg" xml:space="preserve">
+        <value>Името е задължително поле</value>
+    </data>
+    <data name="LastNameRequiredErrorMsg" xml:space="preserve">
+        <value>Фамилията е задължително поле</value>
+    </data>
 </root>

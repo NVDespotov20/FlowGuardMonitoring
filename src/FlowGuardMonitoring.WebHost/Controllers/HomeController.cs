@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using FlowGuardMonitoring.WebHost.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ public class HomeController : Controller
     }
 
     [HttpGet("/")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
     public IActionResult Index()
     {
         return this.View();

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Essentials.Results;
 using FlowGuardMonitoring.BLL.Models;
 using FlowGuardMonitoring.BLL.Options;
+using FlowGuardMonitoring.BLL.Resources;
 using Microsoft.Extensions.Options;
 using Resend;
 
@@ -26,14 +27,35 @@ public class EmailSenderService
     public async Task<StandardResult> SendEmailAsync(EmailModel email)
     {
         var options = this.options.Value;
-        var emailToSend = new EmailMessage
+
+        try
         {
-            From = options.Username,
-            To = email.Recipient,
-            Subject = email.Subject,
-            HtmlBody = email.Body,
-        };
-        await this.resend.EmailSendAsync(emailToSend);
+            var message = new EmailMessage
+            {
+                From = options.Username,
+                To = email.Recipient,
+                Subject = email.Subject,
+                HtmlBody = email.Body,
+            };
+
+            await this.resend.EmailSendAsync(message);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($@"Error sending email: {ex.Message}");
+            return StandardResult.UnsuccessfulResult();
+        }
+
         return StandardResult.SuccessfulResult();
+    }
+
+    public async Task<StandardResult> SendResetPasswordEmailAsync(string email, string resetPasswordUrl)
+    {
+        return await this.SendEmailAsync(new EmailModel
+        {
+            Recipient = email,
+            Subject = EmailLocals.ResetPasswordTitle,
+            Body = EmailLocals.ResetPassword.Replace("{0}", resetPasswordUrl),
+        });
     }
 }

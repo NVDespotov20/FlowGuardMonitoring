@@ -1,6 +1,8 @@
 using FlowGuardMonitoring.BLL;
 using FlowGuardMonitoring.DAL.Data;
+using FlowGuardMonitoring.DAL.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Resend;
 
 namespace FlowGuardMonitoring.WebHost;
@@ -13,21 +15,25 @@ public class Program
 
         builder.Services.AddFlowGuardMonitoringContext(builder.Configuration.GetConnectionString("DefaultConnection"));
         builder.Services.AddHttpClient<ResendClient>();
-        builder.Services.Configure<ResendClientOptions>(o =>
-        {
-            o.ApiToken = builder.Configuration["Email:ApiToken"]!;
-        });
-        builder.Services.AddTransient<IResend, ResendClient>();
         builder.Services.AddServices(builder.Configuration);
 
         builder.Services.AddControllersWithViews();
 
-        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        builder.Services.AddAuthentication()
             .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
             {
                 o.LoginPath = "/login";
                 o.LogoutPath = "/logout";
             });
+
+        builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+                options.SignIn.RequireConfirmedEmail = false;
+                options.Password.RequiredLength = 8;
+            })
+            .AddEntityFrameworkStores<FlowGuardMonitoringContext>()
+            .AddDefaultTokenProviders();
 
         var app = builder.Build();
 

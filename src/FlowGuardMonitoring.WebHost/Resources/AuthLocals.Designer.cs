@@ -122,5 +122,125 @@ namespace FlowGuardMonitoring.WebHost.Resources {
                 return ResourceManager.GetString("EmailFieldInvalidErrorMsg", resourceCulture);
             }
         }
+        
+        internal static string ForgotPasswordText {
+            get {
+                return ResourceManager.GetString("ForgotPasswordText", resourceCulture);
+            }
+        }
+        
+        internal static string ForgotPasswordTitle {
+            get {
+                return ResourceManager.GetString("ForgotPasswordTitle", resourceCulture);
+            }
+        }
+        
+        internal static string ForgotPasswordBtn {
+            get {
+                return ResourceManager.GetString("ForgotPasswordBtn", resourceCulture);
+            }
+        }
+        
+        internal static string ResetPasswordTitle {
+            get {
+                return ResourceManager.GetString("ResetPasswordTitle", resourceCulture);
+            }
+        }
+        
+        internal static string NewPasswordLabel {
+            get {
+                return ResourceManager.GetString("NewPasswordLabel", resourceCulture);
+            }
+        }
+        
+        internal static string NewPasswordPlaceholder {
+            get {
+                return ResourceManager.GetString("NewPasswordPlaceholder", resourceCulture);
+            }
+        }
+        
+        internal static string InvalidLoginErrorMsg {
+            get {
+                return ResourceManager.GetString("InvalidLoginErrorMsg", resourceCulture);
+            }
+        }
+        
+        internal static string UserLockedOutErrorMsg {
+            get {
+                return ResourceManager.GetString("UserLockedOutErrorMsg", resourceCulture);
+            }
+        }
+        
+        internal static string RegisterSuccessMessage {
+            get {
+                return ResourceManager.GetString("RegisterSuccessMessage", resourceCulture);
+            }
+        }
+        
+        internal static string PasswordTooShortErrorMsg {
+            get {
+                return ResourceManager.GetString("PasswordTooShortErrorMsg", resourceCulture);
+            }
+        }
+        
+        internal static string PasswordRequiresNonAlphanumericErrorMsg {
+            get {
+                return ResourceManager.GetString("PasswordRequiresNonAlphanumericErrorMsg", resourceCulture);
+            }
+        }
+        
+        internal static string PasswordRequiresLowerErrorMsg {
+            get {
+                return ResourceManager.GetString("PasswordRequiresLowerErrorMsg", resourceCulture);
+            }
+        }
+        
+        internal static string PasswordRequiresUpperErrorMsg {
+            get {
+                return ResourceManager.GetString("PasswordRequiresUpperErrorMsg", resourceCulture);
+            }
+        }
+        
+        internal static string ForgotPasswordSuccessMessage {
+            get {
+                return ResourceManager.GetString("ForgotPasswordSuccessMessage", resourceCulture);
+            }
+        }
+        
+        internal static string FirstNamePlaceholder {
+            get {
+                return ResourceManager.GetString("FirstNamePlaceholder", resourceCulture);
+            }
+        }
+        
+        internal static string LastNameLabel {
+            get {
+                return ResourceManager.GetString("LastNameLabel", resourceCulture);
+            }
+        }
+        
+        internal static string LastNamePlaceholder {
+            get {
+                return ResourceManager.GetString("LastNamePlaceholder", resourceCulture);
+            }
+        }
+        
+        internal static string FirstNameLabel {
+            get {
+                return ResourceManager.GetString("FirstNameLabel", resourceCulture);
+            }
+        }
+        
+        internal static string FirstNameRequiredErrorMsg {
+            get {
+                return ResourceManager.GetString("FirstNameRequiredErrorMsg", resourceCulture);
+            }
+        }
+        
+        internal static string LastNameRequiredErrorMsg {
+            get {
+                return ResourceManager.GetString("LastNameRequiredErrorMsg", resourceCulture);
+            }
+        }
     }
 }

@@ -1,0 +1,38 @@
+@using System.Text.Encodings.Web
+<script>
+    $("#logout").click(function (e) {
+        swal({
+            title: "Log out?",
+            text: "Are you sure you want to log out?",
+            type: "warning",
+            buttons: {
+                cancel: {
+                    visible: true,
+                    className: "btn btn-danger",
+                },
+                confirm: {
+                    text: "Yes",
+                    className: "btn btn-success",
+                },
+            },
+        }).then((logout) => {
+            if (logout) {
+                fetch(
+                    '/logout',
+                    {
+                        method: 'post'
+                    }
+                )
+                swal("Logged out successfully!", {
+                    buttons: {
+                        confirm: {
+                            className: "btn btn-success",
+                        },
+                    },
+                }).then(() => {
+                    location.reload()
+                })
+            }
+        });
+    });
+</script>

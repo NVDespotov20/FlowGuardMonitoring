@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Resend;
-
-namespace FlowGuardMonitoring.BLL.Options;
+﻿namespace FlowGuardMonitoring.BLL.Options;
 
 public class EmailOptions
 {

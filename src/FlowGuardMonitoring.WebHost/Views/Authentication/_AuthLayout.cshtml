@@ -81,9 +81,6 @@
 
 <!-- Kaiadmin JS -->
 <script src="~/js/kaiadmin.min.js"></script>
-@if (ViewData["ScriptPath"] != null)
-{
-    <partial name="../@ViewData["ScriptPath"]"/>
-}
+<partial name="_ValidationScriptsPartial"/>
 </body>
 </html>

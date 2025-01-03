@@ -21,9 +21,9 @@ public class EmailController : Controller
     {
         return await this.emailSenderService.SendEmailAsync(new EmailModel()
         {
-            Recipient = "ni_des@outlook.com",
-            Subject = "Test",
-            Body = "Hello world!",
+            Recipient = "nvdespotov20@codingburgas.bg",
+            Subject = "Hello!",
+            Body = "<div><strong>Greetings<strong> 👋🏻 from .NET</div>",
         }) == StandardResult.SuccessfulResult()
             ? this.View("../Home/Index") :
             this.View("Error", new ErrorViewModel());
