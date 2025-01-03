@@ -242,5 +242,11 @@ namespace FlowGuardMonitoring.WebHost.Resources {
                 return ResourceManager.GetString("LastNameRequiredErrorMsg", resourceCulture);
             }
         }
+        
+        internal static string ResetPasswordNewPasswordSameAsCurrent {
+            get {
+                return ResourceManager.GetString("ResetPasswordNewPasswordSameAsCurrent", resourceCulture);
+            }
+        }
     }
 }

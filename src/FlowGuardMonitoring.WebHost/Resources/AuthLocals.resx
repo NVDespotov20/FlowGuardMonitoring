@@ -117,4 +117,7 @@
     <data name="LastNameRequiredErrorMsg" xml:space="preserve">
         <value>Фамилията е задължително поле</value>
     </data>
+    <data name="ResetPasswordNewPasswordSameAsCurrent" xml:space="preserve">
+        <value>Новата парола не може да е същата като текущата парола</value>
+    </data>
 </root>

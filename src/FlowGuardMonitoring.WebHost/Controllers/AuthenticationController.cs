@@ -222,6 +222,22 @@ public class AuthenticationController : Controller
                 return this.NotFound();
             }
 
+            var passwordHasher = new PasswordHasher<User>();
+            var passwordVerificationResult = passwordHasher.VerifyHashedPassword(user, user.PasswordHash!, model.Password!);
+
+            if (passwordVerificationResult == PasswordVerificationResult.Success)
+            {
+                this.ModelState.AddModelError(string.Empty, AuthLocals.ResetPasswordNewPasswordSameAsCurrent);
+            }
+
+            var passwordValidator = new PasswordValidator<User>();
+            var passwordValidationResult = await passwordValidator.ValidateAsync(this.userManager, user, model.Password!);
+
+            if (!passwordValidationResult.Succeeded)
+            {
+                this.ModelState.AssignIdentityErrors(passwordValidationResult.Errors);
+            }
+
             var result = await this.userManager.ResetPasswordAsync(user, model.Token!, model.Password!);
             if (result.Succeeded)
             {

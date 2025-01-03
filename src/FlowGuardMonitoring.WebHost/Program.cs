@@ -31,6 +31,10 @@ public class Program
                 options.SignIn.RequireConfirmedAccount = false;
                 options.SignIn.RequireConfirmedEmail = false;
                 options.Password.RequiredLength = 8;
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = true;
             })
             .AddEntityFrameworkStores<FlowGuardMonitoringContext>()
             .AddDefaultTokenProviders();
