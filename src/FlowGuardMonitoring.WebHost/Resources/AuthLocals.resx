@@ -97,7 +97,7 @@
         <value>Паролата трябва да съдържа голяма буква</value>
     </data>
     <data name="ForgotPasswordSuccessMessage" xml:space="preserve">
-        <value>Вашата заявка беше успешна. Моля проверете имейл адреса си за линк за промяна на парола.</value>
+        <value>Ако профилът ви съществува, моля проверете имейл адреса си за линк за промяна на парола.</value>
     </data>
     <data name="FirstNamePlaceholder" xml:space="preserve">
         <value>Въведете име</value>
@@ -119,5 +119,11 @@
     </data>
     <data name="ResetPasswordNewPasswordSameAsCurrent" xml:space="preserve">
         <value>Новата парола не може да е същата като текущата парола</value>
+    </data>
+    <data name="RegisterText" xml:space="preserve">
+        <value>Нямате акаунт? Регистрирайте се сега!</value>
+    </data>
+    <data name="LoginText" xml:space="preserve">
+        <value>Вече имате акаунт? Влезте сега.</value>
     </data>
 </root>

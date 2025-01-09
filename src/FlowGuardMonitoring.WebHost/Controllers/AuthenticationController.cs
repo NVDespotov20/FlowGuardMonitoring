@@ -115,8 +115,6 @@ public class AuthenticationController : Controller
 
             if (result.Succeeded)
             {
-                this.TempData["MessageText"] = AuthLocals.RegisterSuccessMessage;
-                this.TempData["MessageVariant"] = "success";
                 return this.RedirectToAction(nameof(this.Login));
             }
 
@@ -168,8 +166,6 @@ public class AuthenticationController : Controller
 
             this.TempData["MessageText"] = AuthLocals.ForgotPasswordSuccessMessage;
             this.TempData["MessageVariant"] = "success";
-
-            return this.RedirectToAction(nameof(this.Login));
         }
 
         return this.View(model);
@@ -228,6 +224,7 @@ public class AuthenticationController : Controller
             if (passwordVerificationResult == PasswordVerificationResult.Success)
             {
                 this.ModelState.AddModelError(string.Empty, AuthLocals.ResetPasswordNewPasswordSameAsCurrent);
+                return this.View(model);
             }
 
             var passwordValidator = new PasswordValidator<User>();

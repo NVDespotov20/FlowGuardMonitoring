@@ -248,5 +248,17 @@ namespace FlowGuardMonitoring.WebHost.Resources {
                 return ResourceManager.GetString("ResetPasswordNewPasswordSameAsCurrent", resourceCulture);
             }
         }
+        
+        internal static string RegisterText {
+            get {
+                return ResourceManager.GetString("RegisterText", resourceCulture);
+            }
+        }
+        
+        internal static string LoginText {
+            get {
+                return ResourceManager.GetString("LoginText", resourceCulture);
+            }
+        }
     }
 }
