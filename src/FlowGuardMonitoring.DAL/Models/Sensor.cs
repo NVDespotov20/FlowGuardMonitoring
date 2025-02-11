@@ -10,7 +10,7 @@ public class Sensor
     [MaxLength(50)]
     public string Name { get; set; } = string.Empty;
     [MaxLength(50)]
-    public string Type { get; set; } = string.Empty;
+    public SensorType Type { get; set; } = SensorType.Unknown;
 
     public DateTime InstallationDate { get; set; }
 

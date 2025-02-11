@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Azure.Core;
 using FlowGuardMonitoring.WebHost.Resources;
 
-namespace FlowGuardMonitoring.WebHost.Models;
+namespace FlowGuardMonitoring.WebHost.Models.Authentication;
 
 public class ResetPasswordViewModel
 {

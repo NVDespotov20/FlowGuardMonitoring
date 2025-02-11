@@ -2,7 +2,7 @@
   <div class="sidebar-logo">
     <!-- Logo Header -->
     <div class="logo-header" data-background-color="dark">
-      <a asp-page="/Home/Index" class="logo">
+      <a href="@Url.Action("Index", "Home")" class="logo">
         <img
           src="~/img/kaiadmin/logo_light.svg"
           alt="navbar brand"
@@ -31,224 +31,50 @@
                 <span class="sidebar-mini-icon">
                   <i class="fa fa-ellipsis-h"></i>
                 </span>
-          <h4 class="text-section">Components</h4>
         </li>
         <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#base">
+          <a href="@Url.Action("Index", "Home")">
+            <i class="fa-house fa-solid"></i>
+            <p>Dashboard</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a data-bs-toggle="collapse" href="#sensorData">
             <i class="fas fa-layer-group"></i>
-            <p>Base</p>
+            <p>Sensor Data</p>
             <span class="caret"></span>
           </a>
-          <div class="collapse" id="base">
+          <div class="collapse" id="sensorData">
             <ul class="nav nav-collapse">
               <li>
-                <a asp-page="/Component/avatars">
-                  <span class="sub-item">Avatars</span>
+                <a href="@Url.Action("Sensors", "Tables")">
+                  <span class="sub-item">Sensors</span>
                 </a>
               </li>
               <li>
-                <a asp-page="/Component/buttons">
-                  <span class="sub-item">Buttons</span>
+                <a href="@Url.Action("Sites", "Tables")">
+                  <span class="sub-item">Locations</span>
                 </a>
               </li>
               <li>
-                <a asp-page="/Component/gridsystem">
-                  <span class="sub-item">Grid System</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/Component/panels">
-                  <span class="sub-item">Panels</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/Component/notifications">
-                  <span class="sub-item">Notifications</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/Component/sweetalert">
-                  <span class="sub-item">Sweet Alert</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/Component/font-awesome-icons">
-                  <span class="sub-item">Font Awesome Icons</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/Component/simple-line-icons">
-                  <span class="sub-item">Simple Line Icons</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/Component/typography">
-                  <span class="sub-item">Typography</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item active submenu">
-          <a data-bs-toggle="collapse" href="#sidebarLayouts">
-            <i class="fas fa-th-list"></i>
-            <p>Sidebar Layouts</p>
-            <span class="caret"></span>
-          </a>
-          <div class="collapse show" id="sidebarLayouts">
-            <ul class="nav nav-collapse">
-              <li class="active">
-                <a asp-page="/sidebar-style-2">
-                  <span class="sub-item">Sidebar Style 2</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/icon-menu">
-                  <span class="sub-item">Icon Menu</span>
+                <a href="@Url.Action("Measurements", "Tables")">
+                  <span class="sub-item">Measurements</span>
                 </a>
               </li>
             </ul>
           </div>
         </li>
         <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#forms">
-            <i class="fas fa-pen-square"></i>
-            <p>Forms</p>
+          <a data-bs-toggle="collapse" href="#management">
+            <i class="fas fa-layer-group"></i>
+            <p>Manage Assets</p>
             <span class="caret"></span>
           </a>
-          <div class="collapse" id="forms">
+          <div class="collapse" id="management">
             <ul class="nav nav-collapse">
               <li>
-                <a asp-page="/forms/forms">
-                  <span class="sub-item">Basic Form</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#tables">
-            <i class="fas fa-table"></i>
-            <p>Tables</p>
-            <span class="caret"></span>
-          </a>
-          <div class="collapse" id="tables">
-            <ul class="nav nav-collapse">
-              <li>
-                <a asp-page="/tables/tables">
-                  <span class="sub-item">Basic Table</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/tables/datatables">
-                  <span class="sub-item">Datatables</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#maps">
-            <i class="fas fa-map-marker-alt"></i>
-            <p>Maps</p>
-            <span class="caret"></span>
-          </a>
-          <div class="collapse" id="maps">
-            <ul class="nav nav-collapse">
-              <li>
-                <a asp-page="/maps/googlemaps">
-                  <span class="sub-item">Google Maps</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/maps/jsvectormap">
-                  <span class="sub-item">Jsvectormap</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#charts">
-            <i class="far fa-chart-bar"></i>
-            <p>Charts</p>
-            <span class="caret"></span>
-          </a>
-          <div class="collapse" id="charts">
-            <ul class="nav nav-collapse">
-              <li>
-                <a asp-page="/Charts/Charts">
-                  <span class="sub-item">Chart Js</span>
-                </a>
-              </li>
-              <li>
-                <a asp-page="/Charts/Sparkline">
-                  <span class="sub-item">Sparkline</span>
-                </a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li class="nav-item">
-          <a asp-page="/widgets">
-            <i class="fas fa-desktop"></i>
-            <p>Widgets</p>
-            <span class="badge badge-success">4</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a asp-page="/Home/Index">
-            <i class="fas fa-file"></i>
-            <p>Documentation</p>
-            <span class="badge badge-secondary">1</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#submenu">
-            <i class="fas fa-bars"></i>
-            <p>Menu Levels</p>
-            <span class="caret"></span>
-          </a>
-          <div class="collapse" id="submenu">
-            <ul class="nav nav-collapse">
-              <li>
-                <a data-bs-toggle="collapse" href="#subnav1">
-                  <span class="sub-item">Level 1</span>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="subnav1">
-                  <ul class="nav nav-collapse subnav">
-                    <li>
-                      <a href="#">
-                        <span class="sub-item">Level 2</span>
-                      </a>
-                    </li>
-                    <li>
-                      <a href="#">
-                        <span class="sub-item">Level 2</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li>
-                <a data-bs-toggle="collapse" href="#subnav2">
-                  <span class="sub-item">Level 1</span>
-                  <span class="caret"></span>
-                </a>
-                <div class="collapse" id="subnav2">
-                  <ul class="nav nav-collapse subnav">
-                    <li>
-                      <a href="#">
-                        <span class="sub-item">Level 2</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </li>
-              <li>
-                <a href="#">
-                  <span class="sub-item">Level 1</span>
+                <a href="@Url.Action("AddSensor", "Management")">
+                  <span class="sub-item">Add Sensor</span>
                 </a>
               </li>
             </ul>

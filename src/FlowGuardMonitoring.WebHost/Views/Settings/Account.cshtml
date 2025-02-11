@@ -1,0 +1,154 @@
+@{
+    ViewData["Title"] = "Account Settings";
+    Layout = "_Layout";
+}
+@model FlowGuardMonitoring.WebHost.Models.Settings.AccountViewModel
+
+<div class="container mt-5" style="overflow: scroll;">
+    <div class="card" >
+        <div class="card-header">
+            <h4 class="card-title">Account Settings</h4>
+        </div>
+        <div class="card-body">
+            <form asp-action="Account" method="post">
+                <!-- Info Section -->
+                <div class="form-group mb-3">
+                    <label for="FirstName">First Name</label>
+                    <input type="text"
+                           class="form-control"
+                           id="FirstName"
+                           asp-for="FirstName"
+                           value="@Model.FirstName"
+                           disabled>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="LastName">Last Name</label>
+                    <input type="text"
+                           class="form-control"
+                           id="LastName"
+                           asp-for="LastName"
+                           value="@Model.LastName"
+                           disabled>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <button type="button" class="btn btn-primary" id="editInfoBtn">Edit Info</button>
+                    <button type="submit" class="btn btn-success d-none ms-2" id="saveInfoBtn">Save Info</button>
+                    <button type="button" class="btn btn-secondary d-none ms-2" id="cancelInfoBtn">Cancel</button>
+                </div>
+
+                <!-- Email Section -->
+                <div class="form-group mb-3">
+                    <label for="Email">Email</label>
+                    <input type="email"
+                           class="form-control"
+                           id="Email"
+                           asp-for="Email"
+                           value="@Model.Email"
+                           disabled>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <button type="button" class="btn btn-primary" id="editEmailBtn">Edit Email</button>
+                    <button type="submit" class="btn btn-success d-none ms-2" id="saveEmailBtn">Save Email</button>
+                    <button type="button" class="btn btn-secondary d-none ms-2" id="cancelEmailBtn">Cancel</button>
+                </div>
+
+                <!-- Password Section (Initially Hidden) -->
+                <div id="passwordSection" class="d-none">
+                    <div class="form-group mb-3">
+                        <label for="OldPassword">Old Password</label>
+                        <input type="password"
+                               class="form-control"
+                               id="OldPassword"
+                               asp-for="OldPassword"
+                               placeholder="******"
+                               disabled>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="NewPassword">New Password</label>
+                        <input type="password"
+                               class="form-control"
+                               id="NewPassword"
+                               asp-for="NewPassword"
+                               placeholder="******"
+                               disabled>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label for="ConfirmPassword">Confirm Password</label>
+                        <input type="password"
+                               class="form-control"
+                               id="ConfirmPassword"
+                               asp-for="ConfirmPassword"
+                               placeholder="******"
+                               disabled>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <button type="button" class="btn btn-primary" id="editPasswordBtn">Change Password</button>
+                    <button type="submit" class="btn btn-success d-none ms-2" id="savePasswordBtn">Save Password</button>
+                    <button type="button" class="btn btn-secondary d-none ms-2" id="cancelPasswordBtn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Info section: Edit/Save/Cancel functionality
+    document.getElementById('editInfoBtn').addEventListener('click', function() {
+        document.getElementById('FirstName').disabled = false;
+        document.getElementById('LastName').disabled = false;
+
+        document.getElementById('saveInfoBtn').classList.remove('d-none');
+        document.getElementById('cancelInfoBtn').classList.remove('d-none');
+        document.getElementById('editInfoBtn').classList.add('d-none');
+    });
+
+    document.getElementById('cancelInfoBtn').addEventListener('click', function() {
+        document.getElementById('FirstName').disabled = true;
+        document.getElementById('LastName').disabled = true;
+
+        document.getElementById('saveInfoBtn').classList.add('d-none');
+        document.getElementById('cancelInfoBtn').classList.add('d-none');
+        document.getElementById('editInfoBtn').classList.remove('d-none');
+    });
+
+    // Email section: Edit/Save/Cancel functionality
+    document.getElementById('editEmailBtn').addEventListener('click', function() {
+        document.getElementById('Email').disabled = false;
+
+        document.getElementById('saveEmailBtn').classList.remove('d-none');
+        document.getElementById('cancelEmailBtn').classList.remove('d-none');
+        document.getElementById('editEmailBtn').classList.add('d-none');
+    });
+
+    document.getElementById('cancelEmailBtn').addEventListener('click', function() {
+        document.getElementById('Email').disabled = true;
+
+        document.getElementById('saveEmailBtn').classList.add('d-none');
+        document.getElementById('cancelEmailBtn').classList.add('d-none');
+        document.getElementById('editEmailBtn').classList.remove('d-none');
+    });
+
+    // Password section: Show fields and Edit/Save/Cancel functionality
+    document.getElementById('editPasswordBtn').addEventListener('click', function() {
+        document.getElementById('passwordSection').classList.remove('d-none');
+        document.getElementById('OldPassword').disabled = false;
+        document.getElementById('NewPassword').disabled = false;
+        document.getElementById('ConfirmPassword').disabled = false;
+
+        document.getElementById('savePasswordBtn').classList.remove('d-none');
+        document.getElementById('cancelPasswordBtn').classList.remove('d-none');
+        document.getElementById('editPasswordBtn').classList.add('d-none');
+    });
+
+    document.getElementById('cancelPasswordBtn').addEventListener('click', function() {
+        document.getElementById('passwordSection').classList.add('d-none');
+        document.getElementById('OldPassword').disabled = true;
+        document.getElementById('NewPassword').disabled = true;
+        document.getElementById('ConfirmPassword').disabled = true;
+
+        document.getElementById('savePasswordBtn').classList.add('d-none');
+        document.getElementById('cancelPasswordBtn').classList.add('d-none');
+        document.getElementById('editPasswordBtn').classList.remove('d-none');
+    });
+</script>

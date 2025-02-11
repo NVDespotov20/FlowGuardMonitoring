@@ -58,4 +58,14 @@ public class EmailSenderService
             Body = EmailLocals.ResetPassword.Replace("{0}", resetPasswordUrl),
         });
     }
+
+    public async Task<StandardResult> SendEmailConfirmationAsync(string email, string confirmation)
+    {
+        return await this.SendEmailAsync(new EmailModel
+        {
+            Recipient = email,
+            Subject = EmailLocals.ConfirmEmailTitle,
+            Body = EmailLocals.ConfirmEmail.Replace("{0}", confirmation),
+        });
+    }
 }

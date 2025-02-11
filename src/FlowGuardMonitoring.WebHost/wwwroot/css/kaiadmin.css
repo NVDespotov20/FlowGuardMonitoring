@@ -354,7 +354,7 @@ body {
   .main-panel > .container {
     min-height: calc(100% - 123px);
     margin-top: 69px;
-    overflow: hidden;
+    overflow: auto;
     width: 100%;
     max-width: unset;
     padding: 0 !important; }
@@ -362,7 +362,7 @@ body {
     padding: 0px !important;
     min-height: calc(100% - 123px);
     margin-top: 70px;
-    overflow: hidden;
+    overflow: auto;
     width: 100%;
     max-width: unset; }
   .main-panel .row {

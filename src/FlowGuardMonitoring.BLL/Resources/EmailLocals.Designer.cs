@@ -57,9 +57,15 @@ namespace FlowGuardMonitoring.BLL.Resources {
             }
         }
         
-        internal static string FirstNameLabel {
+        internal static string ConfirmEmailTitle {
             get {
-                return ResourceManager.GetString("FirstNameLabel", resourceCulture);
+                return ResourceManager.GetString("ConfirmEmailTitle", resourceCulture);
+            }
+        }
+        
+        internal static string ConfirmEmail {
+            get {
+                return ResourceManager.GetString("ConfirmEmail", resourceCulture);
             }
         }
     }

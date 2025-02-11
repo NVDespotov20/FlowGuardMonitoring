@@ -22,9 +22,12 @@
         <value>Възтановяване на паролата</value>
     </data>
     <data name="ResetPassword" xml:space="preserve">
-        <value>&lt;p&gt;Здравейте, Моля използвайте предоставения линк за да смените паролата си. Линк: &lt;/p&gt; &lt;a href="{0}"&gt;сменете паролата си&lt;/a&gt;</value>
+        <value>&lt;p&gt;Здравейте, Моля използвайте предоставения линк за да смените паролата си.&lt;/p&gt; &lt;a href="{0}"&gt;сменете паролата си тук&lt;/a&gt;</value>
     </data>
-    <data name="FirstNameLabel" xml:space="preserve">
-        <value />
+    <data name="ConfirmEmailTitle" xml:space="preserve">
+        <value>Потвърждаване на имейл</value>
     </data>
+    <data name="ConfirmEmail" xml:space="preserve">
+        <value>&lt;p&gt;Здравейте, Моля използвайте предоставения линк за да потвърдите имейла си.&lt;/p&gt; &lt;a href="{0}"&gt;Потвърждаване на имейла тук&lt;/a&gt;</value>
+    </data> 
 </root>

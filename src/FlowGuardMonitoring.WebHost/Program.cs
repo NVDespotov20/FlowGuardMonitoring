@@ -1,6 +1,9 @@
 using FlowGuardMonitoring.BLL;
+using FlowGuardMonitoring.BLL.Contracts;
+using FlowGuardMonitoring.BLL.Services;
 using FlowGuardMonitoring.DAL.Data;
 using FlowGuardMonitoring.DAL.Models;
+using FlowGuardMonitoring.DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Resend;
@@ -16,6 +19,22 @@ public class Program
         builder.Services.AddFlowGuardMonitoringContext(builder.Configuration.GetConnectionString("DefaultConnection"));
         builder.Services.AddHttpClient<ResendClient>();
         builder.Services.AddServices(builder.Configuration);
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<ICurrentUser, CurrentUserService>();
+        builder.Services.AddScoped<IRepository<Sensor>, SensorRepository>();
+        builder.Services.AddScoped<IRepository<Measurement>, MeasurementRepository>();
+        builder.Services.AddScoped<IRepository<Site>, SiteRepository>();
+        builder.Services.AddScoped<IPaginationService<Site>, PaginationService<Site>>();
+        builder.Services.AddScoped<IPaginationService<Sensor>, PaginationService<Sensor>>();
+        builder.Services.AddScoped<IPaginationService<Measurement>, PaginationService<Measurement>>();
+        builder.Services.AddScoped<StatsService>();
+
+        builder.Services.AddHttpClient("MeasurementApi", client =>
+        {
+            client.BaseAddress = new Uri("http://localhost:5000");
+            client.Timeout = TimeSpan.FromSeconds(30);
+        });
+        builder.Services.AddHostedService<FetchDataBackgroundService>();
 
         builder.Services.AddControllersWithViews();
 
@@ -28,8 +47,7 @@ public class Program
 
         builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = false;
-                options.SignIn.RequireConfirmedEmail = false;
+                options.SignIn.RequireConfirmedEmail = true;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;

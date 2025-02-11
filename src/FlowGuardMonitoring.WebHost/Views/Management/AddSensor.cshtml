@@ -1,0 +1,110 @@
+@using FlowGuardMonitoring.DAL.Models
+@model FlowGuardMonitoring.WebHost.Models.Management.AddSensorViewModel
+@{
+    Layout = "_Layout";
+    var sites = new List<SelectListItem>();
+    sites.AddRange(collection: ViewBag.Sites as List<SelectListItem> ?? new List<SelectListItem>());
+    var sensorTypes = Enum.GetValues(typeof(SensorType))
+        .Cast<SensorType>()
+        .Where(t => t != SensorType.Unknown)
+        .Select(t => new SelectListItem
+        {
+            Value = ((int)t).ToString(),
+            Text = t.ToString()
+        })
+        .ToList();
+}
+
+<div class="wrapper">
+    <div class="page-header">
+        <h3 class="fw-bold mb-3">Create Sensor</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Sensor Details</div>
+                </div>
+                <div class="card-body">
+                    @using (Html.BeginForm("AddSensor", "Management", FormMethod.Post, new { @class = "form-horizontal" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <!-- Sensor Fields -->
+                        <div class="form-group form-group-default">
+                            <label>Name</label>
+                            @Html.TextBoxFor(m => m.Sensor.Name, new { @class = "form-control", placeholder = "Sensor Name" })
+                            @Html.ValidationMessageFor(m => m.Sensor.Name)
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Sensor Type</label>
+                            @Html.DropDownListFor(model => model.Sensor.Type, sensorTypes, new { @class = "form-select" })
+                            @Html.ValidationMessageFor(model => model.Sensor.Type)
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Installation Date</label>
+                            @Html.TextBoxFor(m => m.Sensor.InstallationDate, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+                            @Html.ValidationMessageFor(m => m.Sensor.InstallationDate)
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Active</label>
+                            @Html.CheckBoxFor(m => m.Sensor.IsActive, new { @class = "form-check-input" })
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Site</label>
+                            @Html.DropDownListFor(m => m.Sensor.SiteName, sites, new { @class = "form-select", id = "siteDropdown" })
+                            @Html.ValidationMessageFor(m => m.Sensor.SiteName)
+                        </div>
+
+                        <!-- New Site Fields (Hidden unless "new" is selected) -->
+                        <div id="newSiteForm" style="display:none;">
+                            <h4>Create New Site</h4>
+
+                            <div class="form-group form-group-default">
+                                <label>Site Name</label>
+                                @Html.TextBoxFor(m => m.Site!.Name, new { @class = "form-control", placeholder = "New Site Name" })
+                                @Html.ValidationMessageFor(m => m.Site!.Name)
+                            </div>
+
+                            <div class="form-group form-group-default">
+                                <label>Description</label>
+                                @Html.TextAreaFor(m => m.Site!.Description, new { @class = "form-control", rows = 5, placeholder = "Description" })
+                                @Html.ValidationMessageFor(m => m.Site!.Description)
+                            </div>
+
+                            <div class="form-group form-group-default">
+                                <label>Latitude</label>
+                                @Html.TextBoxFor(m => m.Site!.Latitude, new { @class = "form-control", placeholder = "Latitude" })
+                                @Html.ValidationMessageFor(m => m.Site!.Latitude)
+                            </div>
+
+                            <div class="form-group form-group-default">
+                                <label>Longitude</label>
+                                @Html.TextBoxFor(m => m.Site!.Longitude, new { @class = "form-control", placeholder = "Longitude" })
+                                @Html.ValidationMessageFor(m => m.Site!.Longitude)
+                            </div>
+                        </div>
+
+                        <div class="card-action">
+                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index", "Home")'">Cancel</button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var dropdown = document.getElementById("siteDropdown");
+        var newSiteForm = document.getElementById("newSiteForm");
+        dropdown.addEventListener("change", function () {
+            newSiteForm.style.display = dropdown.value === "new" ? "block" : "none";
+        });
+    });
+</script>

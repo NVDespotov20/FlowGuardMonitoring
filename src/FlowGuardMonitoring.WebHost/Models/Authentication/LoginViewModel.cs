@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using FlowGuardMonitoring.WebHost.Resources;
 
-namespace FlowGuardMonitoring.WebHost.Models;
+namespace FlowGuardMonitoring.WebHost.Models.Authentication;
 
 public class LoginViewModel
 {

@@ -1,0 +1,59 @@
+@{
+    ViewData["Title"] = "Measurements";
+    Layout = "_Layout";
+    ViewData["ScriptPath"] = "/Tables/Partials/TablesScript";
+}
+@model FlowGuardMonitoring.BLL.Models.PaginatedResult<FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Measurements</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table
+                    id="basic-datatables"
+                    class="display table table-striped table-hover"
+                >
+                    <thead>
+                    <tr>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.SensorName)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Timestamp)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.WaterLevel)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.pH)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Temperature)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Contaminants)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.QualityIndex)</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.SensorName)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Timestamp)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.WaterLevel)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.pH)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Temperature)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Contaminants)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.QualityIndex)</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    @foreach (var measurement in Model.Records)
+                    {
+                        <tr>
+                            <td>@measurement.SensorName</td>
+                            <td>@measurement.Timestamp</td>
+                            <td>@measurement.WaterLevel</td>
+                            <td>@measurement.pH</td>
+                            <td>@measurement.Temperature</td>
+                            <td>@measurement.Contaminants</td>
+                            <td>@measurement.QualityIndex</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

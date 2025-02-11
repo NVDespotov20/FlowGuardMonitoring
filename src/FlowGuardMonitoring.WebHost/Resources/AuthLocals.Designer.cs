@@ -260,5 +260,35 @@ namespace FlowGuardMonitoring.WebHost.Resources {
                 return ResourceManager.GetString("LoginText", resourceCulture);
             }
         }
+        
+        internal static string EmailConfirmedMsg {
+            get {
+                return ResourceManager.GetString("EmailConfirmedMsg", resourceCulture);
+            }
+        }
+        
+        internal static string EmailConfirmedLoginMsg {
+            get {
+                return ResourceManager.GetString("EmailConfirmedLoginMsg", resourceCulture);
+            }
+        }
+        
+        internal static string PasswordTooLongErrorMessage {
+            get {
+                return ResourceManager.GetString("PasswordTooLongErrorMessage", resourceCulture);
+            }
+        }
+        
+        internal static string EmailNotConfirmedErrorMsg {
+            get {
+                return ResourceManager.GetString("EmailNotConfirmedErrorMsg", resourceCulture);
+            }
+        }
+        
+        internal static string PasswordRequiresDigitErrorMsg {
+            get {
+                return ResourceManager.GetString("PasswordRequiresDigitErrorMsg", resourceCulture);
+            }
+        }
     }
 }

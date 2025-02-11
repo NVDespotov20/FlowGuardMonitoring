@@ -82,10 +82,9 @@ namespace FlowGuardMonitoring.DAL.Migrations
                     b.Property<int>("SiteId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
+                    b.Property<int>("Type")
                         .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("int");
 
                     b.HasKey("SensorId");
 

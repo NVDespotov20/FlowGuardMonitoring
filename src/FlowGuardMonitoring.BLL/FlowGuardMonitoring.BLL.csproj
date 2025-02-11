@@ -27,7 +27,7 @@
     <ItemGroup>
       <EmbeddedResource Update="Resources\EmailLocals.resx">
         <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>EmailLocales.Designer.cs</LastGenOutput>
+        <LastGenOutput>EmailLocals.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -38,6 +38,26 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>EmailLocals.resx</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Reference Include="Microsoft.Extensions.Hosting.Abstractions">
+        <HintPath>..\..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\8.0.12\ref\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Extensions.Http">
+        <HintPath>..\..\..\..\.nuget\packages\microsoft.aspnetcore.app.ref\8.0.12\ref\net8.0\Microsoft.Extensions.Http.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="Directory\" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <ProjectReference Include="..\FlowGuardMonitoring.DAL\FlowGuardMonitoring.DAL.csproj" />
     </ItemGroup>
 
 </Project>

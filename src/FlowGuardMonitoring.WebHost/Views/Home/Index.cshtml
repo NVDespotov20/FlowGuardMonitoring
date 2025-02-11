@@ -2,6 +2,7 @@
     ViewData["Title"] = "Home page";
     ViewData["ScriptPath"] = "/Home/Partials/IndexScript";
 }
+@model FlowGuardMonitoring.WebHost.Models.Home.IndexViewModel
 
 <div
     class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
@@ -11,12 +12,11 @@
         <h6 class="op-7 mb-2">Free Bootstrap 5 Admin Dashboard</h6>
     </div>
     <div class="ms-md-auto py-2 py-md-0">
-        <a href="#" class="btn btn-label-info btn-round me-2">Manage</a>
         <a href="#" class="btn btn-primary btn-round">Add Customer</a>
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-6 col-md-3">
+    <div class="col">
         <div class="card card-stats card-round">
             <div class="card-body">
                 <div class="row align-items-center">
@@ -29,15 +29,15 @@
                     </div>
                     <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                            <p class="card-category">Visitors</p>
-                            <h4 class="card-title">1,294</h4>
+                            <p class="card-category">Sensors</p>
+                            <h4 class="card-title">@Model.SensorCount</h4>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-3">
+    <div class="col">
         <div class="card card-stats card-round">
             <div class="card-body">
                 <div class="row align-items-center">
@@ -50,15 +50,15 @@
                     </div>
                     <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                            <p class="card-category">Subscribers</p>
-                            <h4 class="card-title">1303</h4>
+                            <p class="card-category">Measurements made</p>
+                            <h4 class="card-title">@Model.MeasurementCount</h4>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-md-3">
+    <div class="col">
         <div class="card card-stats card-round">
             <div class="card-body">
                 <div class="row align-items-center">
@@ -71,29 +71,8 @@
                     </div>
                     <div class="col col-stats ms-3 ms-sm-0">
                         <div class="numbers">
-                            <p class="card-category">Sales</p>
-                            <h4 class="card-title">$ 1,345</h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-sm-6 col-md-3">
-        <div class="card card-stats card-round">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-icon">
-                        <div
-                            class="icon-big text-center icon-secondary bubble-shadow-small"
-                        >
-                            <i class="far fa-check-circle"></i>
-                        </div>
-                    </div>
-                    <div class="col col-stats ms-3 ms-sm-0">
-                        <div class="numbers">
-                            <p class="card-category">Order</p>
-                            <h4 class="card-title">576</h4>
+                            <p class="card-category">Locations</p>
+                            <h4 class="card-title">@Model.LocationCount</h4>
                         </div>
                     </div>
                 </div>

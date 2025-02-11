@@ -3,7 +3,7 @@ using Essentials.Extensions;
 using FlowGuardMonitoring.BLL.Services;
 using FlowGuardMonitoring.DAL.Models;
 using FlowGuardMonitoring.WebHost.Extentions;
-using FlowGuardMonitoring.WebHost.Models;
+using FlowGuardMonitoring.WebHost.Models.Authentication;
 using FlowGuardMonitoring.WebHost.Resources;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,19 +16,16 @@ public class AuthenticationController : Controller
 {
     private readonly UserManager<User> userManager;
     private readonly SignInManager<User> signInManager;
-    private readonly UrlEncoder urlEncoder;
     private readonly EmailSenderService emailService;
     private readonly ILogger<AuthenticationController> logger;
     public AuthenticationController(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        UrlEncoder urlEncoder,
         EmailSenderService emailService,
         ILogger<AuthenticationController> logger)
     {
         this.userManager = userManager;
         this.signInManager = signInManager;
-        this.urlEncoder = urlEncoder;
         this.emailService = emailService;
         this.logger = logger;
     }
@@ -67,6 +64,12 @@ public class AuthenticationController : Controller
             if (await this.userManager.IsLockedOutAsync(user))
             {
                 this.ModelState.AddModelError(string.Empty, AuthLocals.UserLockedOutErrorMsg);
+                return this.View(model);
+            }
+
+            if (!await this.userManager.IsEmailConfirmedAsync(user))
+            {
+                this.ModelState.AddModelError(string.Empty, AuthLocals.EmailNotConfirmedErrorMsg);
                 return this.View(model);
             }
 
@@ -115,6 +118,22 @@ public class AuthenticationController : Controller
 
             if (result.Succeeded)
             {
+                var user = await this.userManager.FindByEmailAsync(model.Email!);
+                if (user == null)
+                {
+                    this.ModelState.AssignIdentityErrors(result.Errors);
+                    return this.RedirectToDefault();
+                }
+
+                var emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+                var encodedToken = UrlEncoder.Default.Encode(emailConfirmationToken);
+                var emailConfirmationUrl = this.HttpContext
+                    .GetAbsoluteRoute($"/email-confirm?email={user.Email}&token={encodedToken}");
+                var emailResult = await this.emailService.SendEmailConfirmationAsync(
+                    user.Email!,
+                    emailConfirmationUrl);
+                this.logger.LogInformation("Email confirmation send result: {Result}", emailResult.ToString());
+
                 return this.RedirectToAction(nameof(this.Login));
             }
 
@@ -245,6 +264,31 @@ public class AuthenticationController : Controller
         }
 
         return this.View(model);
+    }
+
+    [HttpGet("/email-confirm")]
+    public async Task<IActionResult> ConfirmEmail(string? email, string? token)
+    {
+        if (email == null || token == null)
+        {
+            return this.RedirectToDefault();
+        }
+
+        var user = await this.userManager.FindByEmailAsync(email);
+        if (user == null)
+        {
+            return this.NotFound("User not found");
+        }
+
+        var result = await this.userManager.ConfirmEmailAsync(user, token);
+        if (result.Succeeded)
+        {
+            return this.View("EmailConfirmed");
+        }
+        else
+        {
+            return this.View("Error");
+        }
     }
 
     [HttpPost("/logout")]

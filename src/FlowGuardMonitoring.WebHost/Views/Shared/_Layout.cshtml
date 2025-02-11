@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Kaiadmin - Bootstrap 5 Admin Dashboard</title>
+    <title>FlowGuardMonitoring</title>
     <meta
         content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
         name="viewport"
@@ -20,12 +20,12 @@
             google: { families: ["Public Sans:300,400,500,600,700"] },
             custom: {
                 families: [
-                    "Font Awesome 5 Solid",
-                    "Font Awesome 5 Regular",
-                    "Font Awesome 5 Brands",
+                    "Font Awesome 6 Solid",
+                    "Font Awesome 6 Regular",
+                    "Font Awesome 6 Brands",
                     "simple-line-icons",
                 ],
-                urls: ["css/fonts.min.css"],
+                urls: [ "/css/all.min.css"],
             },
             active: function () {
                 sessionStorage.fonts = true;
@@ -69,15 +69,14 @@
                 <!-- End Logo Header -->
             </div>
             <partial name="_Navbar"/>
-
-            <div class="container">
-                <div class="page-inner">
-                    @RenderBody()
-                </div>
-            </div>
-
-            <partial name="_Footer"/>
         </div>
+        <div class="container">
+            <div class="page-inner">
+                @RenderBody()
+            </div>
+        </div>
+
+        <partial name="_Footer"/>
     </div>
 </div>
 <!--   Core JS Files   -->
@@ -110,6 +109,7 @@
 
 <!-- Sweet Alert -->
 <script src="~/js/plugin/sweetalert/sweetalert.min.js"></script>
+<script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
 
 <!-- Kaiadmin JS -->
 <script src="~/js/kaiadmin.min.js"></script>

@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Sensors";
+    Layout = "_Layout";
+    ViewData["ScriptPath"] = "/Tables/Partials/TablesScript";
+}
+@model FlowGuardMonitoring.BLL.Models.PaginatedResult<FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel>
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Sensors</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table
+                    id="basic-datatables"
+                    class="display table table-striped table-hover"
+                >
+                    <thead>
+                    <tr>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Name)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Type)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.InstallationDate)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.IsActive)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.SiteName)</th>
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Name)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Type)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.InstallationDate)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.IsActive)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.SiteName)</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    @foreach (var sensor in Model.Records)
+                    {
+                        <tr>
+                            <td>@sensor.Name</td>
+                            <td>@sensor.Type</td>
+                            <td>@sensor.InstallationDate.ToShortDateString()</td>
+                            <td>@(sensor.IsActive ? "Active" : "Inactive")</td>
+                            <td>@sensor.SiteName</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

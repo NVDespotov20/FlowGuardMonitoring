@@ -126,4 +126,19 @@
     <data name="LoginText" xml:space="preserve">
         <value>Вече имате акаунт? Влезте сега.</value>
     </data>
+    <data name="EmailConfirmedMsg" xml:space="preserve">
+        <value>Имейлът Ви беше потвърден успешно.</value>
+    </data>
+    <data name="EmailConfirmedLoginMsg" xml:space="preserve">
+        <value>Вече може да влезете с Вашия акаунт.</value>
+    </data>
+    <data name="PasswordTooLongErrorMessage" xml:space="preserve">
+        <value />
+    </data>
+    <data name="EmailNotConfirmedErrorMsg" xml:space="preserve">
+        <value>Моля потвърдете имейла си за да активирате този профил!</value>
+    </data>
+    <data name="PasswordRequiresDigitErrorMsg" xml:space="preserve">
+        <value>Паролата трябва да съдържа цифра</value>
+    </data>
 </root>
