@@ -6,11 +6,11 @@ namespace FlowGuardMonitoring.DAL.Repositories;
 public interface IRepository<T>
     where T : class
 {
-    Task<IEnumerable<T>> GetAllAsync();
-    Task<List<T>> GetPagedAsync(int pageNumber, int pageSize);
+    Task<List<T>> GetAllAsync();
+    Task<List<T>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue);
     Task<T?> GetByIdAsync(int id);
     Task AddAsync(T entity);
     Task UpdateAsync(T entity);
     Task DeleteAsync(int id);
-    int GetCount();
+    public int GetCount(string searchValue = "");
 }

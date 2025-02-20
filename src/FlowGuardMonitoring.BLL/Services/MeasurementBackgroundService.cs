@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -13,15 +14,15 @@ using Microsoft.Extensions.Logging;
 
 namespace FlowGuardMonitoring.BLL.Services;
 
-public class FetchDataBackgroundService : BackgroundService
+public class MeasurementBackgroundService : BackgroundService
 {
-    private readonly ILogger<FetchDataBackgroundService> logger;
+    private readonly ILogger<MeasurementBackgroundService> logger;
     private readonly IServiceScopeFactory serviceScopeFactory;
     private readonly IHttpClientFactory httpClientFactory;
     private readonly TimeSpan interval = TimeSpan.FromMinutes(1);
 
-    public FetchDataBackgroundService(
-        ILogger<FetchDataBackgroundService> logger,
+    public MeasurementBackgroundService(
+        ILogger<MeasurementBackgroundService> logger,
         IServiceScopeFactory serviceScopeFactory,
         IHttpClientFactory httpClientFactory)
     {
@@ -60,7 +61,7 @@ public class FetchDataBackgroundService : BackgroundService
 
         var client = this.httpClientFactory.CreateClient("MeasurementApi");
 
-        var sensors = await sensorRepository.GetAllAsync();
+        List<Sensor> sensors = await sensorRepository.GetAllAsync();
 
         if (sensors == null || !sensors.Any())
         {
@@ -70,7 +71,7 @@ public class FetchDataBackgroundService : BackgroundService
 
         foreach (var sensor in sensors)
         {
-            var response = await client.GetAsync($"http://127.0.0.1:5000/api/measurements?sensorId={sensor.SensorId}", stoppingToken);
+            var response = await client.GetAsync($"http://127.0.0.1:5000/sensor/{sensor.SensorId}/measurement", stoppingToken);
 
             if (response.IsSuccessStatusCode)
             {
@@ -98,7 +99,7 @@ public class FetchDataBackgroundService : BackgroundService
     {
         return new Measurement
         {
-            Timestamp = dto.Timestamp,
+            Timestamp = dto.TimeStamp,
             WaterLevel = dto.WaterLevel,
             Temperature = dto.Temperature,
             pH = dto.pH,

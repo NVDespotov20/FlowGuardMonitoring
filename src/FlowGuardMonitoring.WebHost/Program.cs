@@ -34,7 +34,7 @@ public class Program
             client.BaseAddress = new Uri("http://localhost:5000");
             client.Timeout = TimeSpan.FromSeconds(30);
         });
-        builder.Services.AddHostedService<FetchDataBackgroundService>();
+        builder.Services.AddHostedService<MeasurementBackgroundService>();
 
         builder.Services.AddControllersWithViews();
 

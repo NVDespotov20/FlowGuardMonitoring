@@ -6,15 +6,44 @@ namespace FlowGuardMonitoring.DAL.Repositories;
 
 public class SiteRepository(FlowGuardMonitoringContext context) : IRepository<Site>
 {
-    public async Task<IEnumerable<Site>> GetAllAsync()
+    public async Task<List<Site>> GetAllAsync()
     {
         return await context.Sites.ToListAsync();
     }
 
-    public async Task<List<Site>> GetPagedAsync(int pageNumber, int pageSize)
+    public async Task<List<Site>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue)
     {
-        return await context.Sites
-            .OrderBy(s => s.Name)
+        var query = context.Sites.AsQueryable();
+
+        if (!string.IsNullOrEmpty(searchValue))
+        {
+            query = query.Where(s =>
+                s.Name.Contains(searchValue) ||
+                s.Description.Contains(searchValue) ||
+                s.Latitude.ToString().Contains(searchValue) ||
+                s.Longitude.ToString().Contains(searchValue));
+        }
+
+        switch (sortColumn.ToLower())
+        {
+            case "name":
+                query = sortDirection == "asc" ? query.OrderBy(s => s.Name) : query.OrderByDescending(s => s.Name);
+                break;
+            case "description":
+                query = sortDirection == "asc" ? query.OrderBy(s => s.Description) : query.OrderByDescending(s => s.Description);
+                break;
+            case "latitude":
+                query = sortDirection == "asc" ? query.OrderBy(s => s.Latitude) : query.OrderByDescending(s => s.Latitude);
+                break;
+            case "longitude":
+                query = sortDirection == "asc" ? query.OrderBy(s => s.Longitude) : query.OrderByDescending(s => s.Longitude);
+                break;
+            default:
+                query = sortDirection == "asc" ? query.OrderBy(s => s.Name) : query.OrderByDescending(s => s.Name);
+                break;
+        }
+
+        return await query
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -47,8 +76,21 @@ public class SiteRepository(FlowGuardMonitoringContext context) : IRepository<Si
         }
     }
 
-    public int GetCount()
+    public int GetCount(string searchValue)
     {
-        return context.Sites.Count();
+        // Start with the base query for Sites
+        var query = context.Sites.AsQueryable();
+
+        // Apply search filter if provided
+        if (!string.IsNullOrEmpty(searchValue))
+        {
+            query = query.Where(s =>
+                s.Name.Contains(searchValue) ||
+                s.Description.Contains(searchValue) ||
+                s.Latitude.ToString().Contains(searchValue) ||
+                s.Longitude.ToString().Contains(searchValue));
+        }
+
+        return query.Count();
     }
 }

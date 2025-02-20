@@ -31,26 +31,25 @@ namespace FlowGuardMonitoring.DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MeasurementId"));
 
                     b.Property<string>("Contaminants")
-                        .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<float>("QualityIndex")
+                    b.Property<float?>("QualityIndex")
                         .HasColumnType("real");
 
                     b.Property<int>("SensorId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Temperature")
+                    b.Property<float?>("Temperature")
                         .HasColumnType("real");
 
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("WaterLevel")
+                    b.Property<float?>("WaterLevel")
                         .HasColumnType("real");
 
-                    b.Property<float>("pH")
+                    b.Property<float?>("pH")
                         .HasColumnType("real");
 
                     b.HasKey("MeasurementId");

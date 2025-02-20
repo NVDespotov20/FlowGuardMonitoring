@@ -8,19 +8,19 @@ public class MeasurementViewModel
     public DateTime Timestamp { get; set; }
 
     [Required]
-    public float WaterLevel { get; set; }
+    public float? WaterLevel { get; set; }
 
     [Required]
-    public float Temperature { get; set; }
+    public float? Temperature { get; set; }
 
     [Required]
-    public float pH { get; set; }
+    public float? pH { get; set; }
 
     [MaxLength(50)]
-    public string Contaminants { get; set; } = string.Empty;
+    public string? Contaminants { get; set; } = string.Empty;
 
     [Required]
-    public float QualityIndex { get; set; }
+    public float? QualityIndex { get; set; }
 
     [Required]
     public string SensorName { get; set; } = string.Empty;

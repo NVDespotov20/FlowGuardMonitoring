@@ -1,0 +1,37 @@
+<script>
+    $(document).ready(function () {
+        $("#table").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "order": [[1, 'desc']],
+            "ajax": {
+                "url": "/Tables/GetMeasurements",
+                "type": "POST",
+                "dataType": "json",
+                "contentType": "application/json",
+                "data": function (d) {
+                    return JSON.stringify({
+                        draw: d.draw,
+                        start: d.start,
+                        length: d.length,
+                        sortColumn: d.columns[d.order[0].column].data,
+                        sortDirection: d.order[0].dir,
+                        searchValue: d.search.value
+                    });
+                }
+            },
+            "columns": [
+                { "data": "sensorName" },
+                { "data": "timestamp" },
+                { "data": "waterLevel" },
+                { "data": "pH" },
+                { "data": "temperature" },
+                { "data": "contaminants" },
+                { "data": "qualityIndex" }
+            ],
+        });
+
+    });
+</script>

@@ -1,0 +1,35 @@
+<script>
+    $(document).ready(function () {
+        $("#table").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "ajax": {
+                "url": "/Tables/GetSensors",
+                "type": "POST",
+                "dataType": "json",
+                "contentType": "application/json",
+                "data": function (d) {
+                    return JSON.stringify({
+                        draw: d.draw,
+                        start: d.start,
+                        length: d.length,
+                        sortColumn: d.columns[d.order[0].column].data,
+                        sortDirection: d.order[0].dir,
+                        searchValue: d.search.value
+                    });
+                }
+            },
+            "columns": [
+                { "data": "name" },
+                { "data": "type" },
+                { "data": "installationDate" },
+                { "data": "isActive" },
+                { "data": "siteName" },
+
+            ],
+        });
+
+    });
+</script>

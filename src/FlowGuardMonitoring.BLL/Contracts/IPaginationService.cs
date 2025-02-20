@@ -6,5 +6,9 @@ namespace FlowGuardMonitoring.BLL.Contracts;
 public interface IPaginationService<T>
 {
     Task<PaginatedResult<T>> GetPaginatedRecords(
-        int pageNumber, int pageSize);
+        int pageNumber,
+        int pageSize,
+        string sortColumn,
+        string sortDirection,
+        string searchValue);
 }

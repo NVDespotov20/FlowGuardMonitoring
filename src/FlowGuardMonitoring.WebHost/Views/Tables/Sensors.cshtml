@@ -1,7 +1,7 @@
 @{
     ViewData["Title"] = "Sensors";
     Layout = "_Layout";
-    ViewData["ScriptPath"] = "/Tables/Partials/TablesScript";
+    ViewData["ScriptPath"] = "/Tables/Partials/SensorsScript";
 }
 @model FlowGuardMonitoring.BLL.Models.PaginatedResult<FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel>
 
@@ -13,7 +13,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table
-                    id="basic-datatables"
+                    id="table"
                     class="display table table-striped table-hover"
                 >
                     <thead>

@@ -26,67 +26,103 @@ public class TablesController : Controller
         this.measurementsPagination = measurementsPagination;
     }
 
-    public async Task<ActionResult> Sensors(int page = 1, int pageSize = 10)
+    public async Task<ActionResult> Sensors()
     {
-        var sensors = await this.sensorPagination.GetPaginatedRecords(page, pageSize);
-        var viewModel = new PaginatedResult<SensorViewModel>()
-        {
-            Records = sensors.Records.Select(s => new SensorViewModel
-            {
-                Name = s.Name,
-                InstallationDate = s.InstallationDate,
-                IsActive = s.IsActive,
-                SiteName = s.Site.Name,
-                Type = s.Type,
-            }).ToList(),
-            PageNumber = sensors.PageNumber,
-            PageSize = sensors.PageSize,
-            TotalRecords = sensors.TotalRecords,
-            TotalPages = sensors.TotalPages,
-        };
-        return this.View(viewModel);
+        return this.View(new PaginatedResult<SensorViewModel>());
     }
 
-    public async Task<ActionResult> Sites(int page = 1, int pageSize = 10)
+    public async Task<ActionResult> Sites()
     {
-        var sites = await this.sitesPagination.GetPaginatedRecords(page, pageSize);
-        var viewModel = new PaginatedResult<SiteViewModel>()
-        {
-            Records = sites.Records.Select(s => new SiteViewModel
-            {
-                Name = s.Name,
-                Description = s.Description,
-                Longitude = s.Longitude,
-                Latitude = s.Latitude,
-            }).ToList(),
-            PageNumber = sites.PageNumber,
-            PageSize = sites.PageSize,
-            TotalRecords = sites.TotalRecords,
-            TotalPages = sites.TotalPages,
-        };
-        return this.View(viewModel);
+        return this.View(new PaginatedResult<SiteViewModel>());
     }
 
-    public async Task<ActionResult> Measurements(int page = 1, int pageSize = 10)
+    public async Task<ActionResult> Measurements()
     {
-        var measurements = await this.measurementsPagination.GetPaginatedRecords(page, pageSize);
-        var viewModel = new PaginatedResult<MeasurementViewModel>()
+        return this.View(new PaginatedResult<MeasurementViewModel>());
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetMeasurements([FromBody] DataTablesRequest request)
+    {
+        int pageNumber = (request.Start / request.Length) + 1;
+
+        var measurements = await this.measurementsPagination.GetPaginatedRecords(
+            pageNumber, request.Length, request.SortColumn, request.SortDirection, request.SearchValue);
+
+        var viewModel = measurements.Records.Select(m => new MeasurementViewModel
         {
-            Records = measurements.Records.Select(m => new MeasurementViewModel
-            {
-                Timestamp = m.Timestamp,
-                Contaminants = m.Contaminants,
-                pH = m.pH,
-                QualityIndex = m.QualityIndex,
-                SensorName = m.Sensor.Name,
-                Temperature = m.Temperature,
-                WaterLevel = m.WaterLevel,
-            }).ToList(),
-            PageNumber = measurements.PageNumber,
-            PageSize = measurements.PageSize,
-            TotalRecords = measurements.TotalRecords,
-            TotalPages = measurements.TotalPages,
+            Timestamp = m.Timestamp,
+            Contaminants = m.Contaminants,
+            pH = m.pH,
+            QualityIndex = m.QualityIndex,
+            SensorName = m.Sensor.Name,
+            Temperature = m.Temperature,
+            WaterLevel = m.WaterLevel,
+        }).ToList();
+
+        var jsonData = new
+        {
+            draw = request.Draw,
+            recordsFiltered = measurements.TotalRecords,
+            recordsTotal = measurements.TotalRecords,
+            data = viewModel,
         };
-        return this.View(viewModel);
+
+        return this.Ok(jsonData);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetSensors([FromBody] DataTablesRequest request)
+    {
+        int pageNumber = (request.Start / request.Length) + 1;
+
+        var sensors = await this.sensorPagination.GetPaginatedRecords(
+            pageNumber, request.Length, request.SortColumn, request.SortDirection, request.SearchValue);
+
+        var viewModel = sensors.Records.Select(s => new SensorViewModel
+        {
+            Name = s.Name,
+            Type = s.Type,
+            InstallationDate = s.InstallationDate,
+            IsActive = s.IsActive,
+            SiteName = s.Site.Name,
+        }).ToList();
+
+        var jsonData = new
+        {
+            draw = request.Draw,
+            recordsFiltered = sensors.TotalRecords,
+            recordsTotal = sensors.TotalRecords,
+            data = viewModel,
+        };
+
+        return this.Ok(jsonData);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetSites([FromBody] DataTablesRequest request)
+    {
+        int pageNumber = (request.Start / request.Length) + 1;
+
+        var sites = await this.sitesPagination.GetPaginatedRecords(
+            pageNumber, request.Length, request.SortColumn, request.SortDirection, request.SearchValue);
+
+        var viewModel = sites.Records.Select(s => new SiteViewModel
+        {
+            Name = s.Name,
+            Description = s.Description,
+            Latitude = s.Latitude,
+            Longitude = s.Longitude,
+        }).ToList();
+
+        var jsonData = new
+        {
+            draw = request.Draw,
+            recordsFiltered = sites.TotalRecords,
+            recordsTotal = sites.TotalRecords,
+            data = viewModel,
+        };
+
+        return this.Ok(jsonData);
     }
 }

@@ -18,11 +18,13 @@ public class PaginationService<T> : IPaginationService<T>
     }
 
     public async Task<PaginatedResult<T>> GetPaginatedRecords(
-        int pageNumber, int pageSize)
+        int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue)
     {
-        List<T> records = await this.repository.GetPagedAsync(pageNumber, pageSize);
+        // Get paginated records with search and sort options
+        List<T> records = await this.repository.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue);
 
-        var totalRecords = this.repository.GetCount();
+        // Get total record count before applying pagination
+        var totalRecords = this.repository.GetCount(searchValue);
         var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
         return new PaginatedResult<T>

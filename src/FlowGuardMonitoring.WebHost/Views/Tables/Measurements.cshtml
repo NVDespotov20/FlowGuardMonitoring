@@ -1,7 +1,7 @@
 @{
     ViewData["Title"] = "Measurements";
     Layout = "_Layout";
-    ViewData["ScriptPath"] = "/Tables/Partials/TablesScript";
+    ViewData["ScriptPath"] = "/Tables/Partials/MeasurementsScript";
 }
 @model FlowGuardMonitoring.BLL.Models.PaginatedResult<FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel>
 
@@ -13,7 +13,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table
-                    id="basic-datatables"
+                    id="table"
                     class="display table table-striped table-hover"
                 >
                     <thead>
@@ -44,11 +44,11 @@
                         <tr>
                             <td>@measurement.SensorName</td>
                             <td>@measurement.Timestamp</td>
-                            <td>@measurement.WaterLevel</td>
-                            <td>@measurement.pH</td>
-                            <td>@measurement.Temperature</td>
-                            <td>@measurement.Contaminants</td>
-                            <td>@measurement.QualityIndex</td>
+                            <td>@(measurement.WaterLevel == null ? "" : measurement.WaterLevel)</td>
+                            <td>@(measurement.pH == null ? "" : measurement.pH)</td>
+                            <td>@(measurement.Temperature == null ? "" : measurement.Temperature)</td>
+                            <td>@(measurement.Contaminants ?? "")</td>
+                            <td>@(measurement.QualityIndex == null ? "" : measurement.QualityIndex)</td>
                         </tr>
                     }
                     </tbody>
