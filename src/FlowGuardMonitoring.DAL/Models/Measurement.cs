@@ -8,18 +8,8 @@ public class Measurement
     public int MeasurementId { get; set; }
 
     public DateTime Timestamp { get; set; }
-
-    public float? WaterLevel { get; set; }
-
-    public float? Temperature { get; set; }
-
-    public float? pH { get; set; }
-
     [MaxLength(50)]
-    public string? Contaminants { get; set; } = string.Empty;
-
-    public float? QualityIndex { get; set; }
-
+    public string Value { get; set; } = string.Empty;
     public int SensorId { get; set; }
     public required Sensor Sensor { get; set; }
 }

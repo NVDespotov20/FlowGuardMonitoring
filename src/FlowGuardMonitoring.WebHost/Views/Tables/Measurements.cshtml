@@ -20,22 +20,16 @@
                     <tr>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.SensorName)</th>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Timestamp)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.WaterLevel)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.pH)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Temperature)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Contaminants)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.QualityIndex)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Type)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Value)</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.SensorName)</th>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Timestamp)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.WaterLevel)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.pH)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Temperature)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Contaminants)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.QualityIndex)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Type)</th>
+                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Value)</th>
                     </tr>
                     </tfoot>
                     <tbody>
@@ -44,11 +38,8 @@
                         <tr>
                             <td>@measurement.SensorName</td>
                             <td>@measurement.Timestamp</td>
-                            <td>@(measurement.WaterLevel == null ? "" : measurement.WaterLevel)</td>
-                            <td>@(measurement.pH == null ? "" : measurement.pH)</td>
-                            <td>@(measurement.Temperature == null ? "" : measurement.Temperature)</td>
-                            <td>@(measurement.Contaminants ?? "")</td>
-                            <td>@(measurement.QualityIndex == null ? "" : measurement.QualityIndex)</td>
+                            <td>@measurement.Type</td>
+                            <td>@measurement.Value</td>
                         </tr>
                     }
                     </tbody>

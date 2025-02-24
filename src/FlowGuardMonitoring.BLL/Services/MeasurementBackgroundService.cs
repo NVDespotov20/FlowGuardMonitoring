@@ -100,11 +100,7 @@ public class MeasurementBackgroundService : BackgroundService
         return new Measurement
         {
             Timestamp = dto.TimeStamp,
-            WaterLevel = dto.WaterLevel,
-            Temperature = dto.Temperature,
-            pH = dto.pH,
-            Contaminants = dto.Contaminants,
-            QualityIndex = dto.QualityIndex,
+            Value = dto.Value,
             SensorId = sensorId,
             Sensor = null!,
         };

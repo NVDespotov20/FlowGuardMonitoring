@@ -97,33 +97,29 @@ def generate_measurement(sensor):
     # Default values for the measurement
     data = {
         "timeStamp": datetime.now().isoformat(),
-        "waterLevel": None,
-        "temperature": None,
-        "pH": None,
-        "contaminants": None,
-        "qualityIndex": None
+        "value": None,
     }
 
     sensor_type = sensor.get("type")
 
     if sensor_type == "Ph":
-        data["pH"] = round(random.uniform(6.5, 8.5), 2)
+        data["value"] = str(round(random.uniform(6.5, 8.5), 2))
 
     elif sensor_type == "Level":
         depth = sensor.get("location", {}).get("depth", 10)
-        data["waterLevel"] = round(random.uniform(0, depth), 2)
+        data["value"] = str(round(random.uniform(0, depth), 2))
 
     elif sensor_type == "Temperature":
-        data["temperature"] = round(random.uniform(0, 35), 2)
+        data["value"] = str(round(random.uniform(0, 35), 2))
 
     elif sensor_type == "Quality":
-        data["qualityIndex"] = random.randint(0, 100)
+        data["value"] = str(random.randint(0, 100))
 
     elif sensor_type == "Contaminants":
         possible_contaminants = ["Lead", "Mercury", "Arsenic", "Nitrates", "Pesticides", "Cadmium"]
         num = random.randint(1, len(possible_contaminants))
         contaminants = random.sample(possible_contaminants, num)
-        data["contaminants"] = ", ".join(contaminants)
+        data["value"] = ", ".join(contaminants)
 
     return data
 

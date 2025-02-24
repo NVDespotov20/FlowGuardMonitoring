@@ -51,13 +51,10 @@ public class TablesController : Controller
 
         var viewModel = measurements.Records.Select(m => new MeasurementViewModel
         {
-            Timestamp = m.Timestamp,
-            Contaminants = m.Contaminants,
-            pH = m.pH,
-            QualityIndex = m.QualityIndex,
             SensorName = m.Sensor.Name,
-            Temperature = m.Temperature,
-            WaterLevel = m.WaterLevel,
+            Timestamp = m.Timestamp.ToString("dd-MM-yyyy HH:mm"),
+            Type = m.Sensor.Type.ToString(),
+            Value = m.Value,
         }).ToList();
 
         var jsonData = new
