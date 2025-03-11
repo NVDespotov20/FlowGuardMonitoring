@@ -6,7 +6,6 @@ using FlowGuardMonitoring.WebHost.Models.Management;
 using FlowGuardMonitoring.WebHost.Models.Tables;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -18,14 +17,12 @@ public class ManagementController : Controller
     private readonly IRepository<Sensor> sensorRepository;
     private readonly IRepository<Site> siteRepository;
     private readonly ICurrentUser currentUser;
-    private readonly UserManager<User> userManager;
 
-    public ManagementController(IRepository<Sensor> sensorRepository, IRepository<Site> siteRepository, ICurrentUser currentUser, UserManager<User> userManager)
+    public ManagementController(IRepository<Sensor> sensorRepository, IRepository<Site> siteRepository, ICurrentUser currentUser)
     {
         this.sensorRepository = sensorRepository;
         this.siteRepository = siteRepository;
         this.currentUser = currentUser;
-        this.userManager = userManager;
     }
 
     public IActionResult Manage()
@@ -72,7 +69,6 @@ public class ManagementController : Controller
                 Latitude = model.Site.Latitude,
                 Longitude = model.Site.Longitude,
                 UserId = this.currentUser.UserId,
-                User = (await this.userManager.GetUserAsync(this.currentUser.User!))!,
             };
 
             await this.siteRepository.AddAsync(newSiteEntity);

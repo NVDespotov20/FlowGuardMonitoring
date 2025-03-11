@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Threading.Tasks;
 using FlowGuardMonitoring.DAL;
@@ -15,10 +16,17 @@ namespace FlowGuardMonitoring.DAL.Repositories;
             return await context.Measurements.ToListAsync();
         }
 
-        public async Task<List<Measurement>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue)
+        public async Task<List<Measurement>> GetPagedAsync(
+            int pageNumber,
+            int pageSize,
+            string sortColumn,
+            string sortDirection,
+            string searchValue,
+            string userId)
         {
             var query = context.Measurements
                 .Include(m => m.Sensor)
+                .Where(m => m.Sensor.Site.UserId == userId)
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchValue))
@@ -36,6 +44,9 @@ namespace FlowGuardMonitoring.DAL.Repositories;
                     break;
                 case "value":
                     query = sortDirection == "asc" ? query.OrderBy(m => m.Value) : query.OrderByDescending(m => m.Value);
+                    break;
+                case "type":
+                    query = sortDirection == "asc" ? query.OrderBy(m => m.Sensor.Type) : query.OrderByDescending(m => m.Sensor.Type);
                     break;
                 default:
                     query = sortDirection == "asc" ? query.OrderBy(m => m.Timestamp) : query.OrderByDescending(m => m.Timestamp);
@@ -91,18 +102,18 @@ namespace FlowGuardMonitoring.DAL.Repositories;
             var page = await context.Measurements.ToListAsync();
         }
 
-        public int GetCount(string searchValue)
+        public int GetCount(string userId, string searchValue)
         {
-            var query = context.Measurements.AsQueryable();
-
-            if (!string.IsNullOrEmpty(searchValue))
+            if (string.IsNullOrEmpty(searchValue))
             {
-                query = query.Where(m =>
-                    m.Sensor.Name.Contains(searchValue) ||
-                    m.Timestamp.ToString("yyyy-MM-ddTHH:mm:ssK").Contains(searchValue) ||
-                    m.Value.Contains(searchValue));
+                return context.Measurements
+                    .Count(m => m.Sensor.Site.UserId == userId);
             }
 
-            return query.Count();
+            return context.Measurements
+                .Count(m =>
+                    m.Sensor.Site.UserId == userId && (
+                    m.Sensor.Name.Contains(searchValue) ||
+                    m.Value.Contains(searchValue)));
         }
     }

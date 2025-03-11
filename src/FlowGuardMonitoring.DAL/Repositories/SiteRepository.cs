@@ -11,9 +11,17 @@ public class SiteRepository(FlowGuardMonitoringContext context) : IRepository<Si
         return await context.Sites.ToListAsync();
     }
 
-    public async Task<List<Site>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue)
+    public async Task<List<Site>> GetPagedAsync(
+        int pageNumber,
+        int pageSize,
+        string sortColumn,
+        string sortDirection,
+        string searchValue,
+        string userId)
     {
-        var query = context.Sites.AsQueryable();
+        var query = context.Sites
+            .Where(s => s.UserId == userId)
+            .AsQueryable();
 
         if (!string.IsNullOrEmpty(searchValue))
         {
@@ -76,12 +84,12 @@ public class SiteRepository(FlowGuardMonitoringContext context) : IRepository<Si
         }
     }
 
-    public int GetCount(string searchValue)
+    public int GetCount(string userId, string searchValue)
     {
-        // Start with the base query for Sites
-        var query = context.Sites.AsQueryable();
+        var query = context.Sites
+            .Where(s => s.UserId == userId)
+            .AsQueryable();
 
-        // Apply search filter if provided
         if (!string.IsNullOrEmpty(searchValue))
         {
             query = query.Where(s =>

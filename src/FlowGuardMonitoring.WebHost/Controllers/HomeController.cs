@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using FlowGuardMonitoring.BLL.Contracts;
 using FlowGuardMonitoring.BLL.Services;
 using FlowGuardMonitoring.WebHost.Models;
 using FlowGuardMonitoring.WebHost.Models.Home;
@@ -11,11 +12,13 @@ namespace FlowGuardMonitoring.WebHost.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> logger;
-    private readonly StatsService statsService;
-    public HomeController(ILogger<HomeController> logger, StatsService statsService)
+    private readonly StatisticsService statisticsService;
+    private readonly ICurrentUser currentUser;
+    public HomeController(ILogger<HomeController> logger, StatisticsService statisticsService, ICurrentUser currentUser)
     {
         this.logger = logger;
-        this.statsService = statsService;
+        this.statisticsService = statisticsService;
+        this.currentUser = currentUser;
     }
 
     [HttpGet("/")]
@@ -24,9 +27,9 @@ public class HomeController : Controller
     {
         IndexViewModel model = new IndexViewModel
         {
-            LocationCount = this.statsService.GetLocationsCount(),
-            MeasurementCount = this.statsService.GetMeasurementsCount(),
-            SensorCount = this.statsService.GetSensorsCount(),
+            LocationCount = this.statisticsService.GetLocationsCount(this.currentUser.UserId),
+            MeasurementCount = this.statisticsService.GetMeasurementsCount(this.currentUser.UserId),
+            SensorCount = this.statisticsService.GetSensorsCount(this.currentUser.UserId),
         };
         return this.View(model);
     }

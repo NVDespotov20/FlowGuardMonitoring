@@ -45,7 +45,7 @@ namespace FlowGuardMonitoring.DAL.Migrations
 
                     b.HasIndex("SensorId");
 
-                    b.ToTable("Measurements");
+                    b.ToTable("Measurements", (string)null);
                 });
 
             modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.Sensor", b =>
@@ -78,7 +78,7 @@ namespace FlowGuardMonitoring.DAL.Migrations
 
                     b.HasIndex("SiteId");
 
-                    b.ToTable("Sensors");
+                    b.ToTable("Sensors", (string)null);
                 });
 
             modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.Site", b =>
@@ -113,7 +113,7 @@ namespace FlowGuardMonitoring.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Sites");
+                    b.ToTable("Sites", (string)null);
                 });
 
             modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.User", b =>

@@ -10,5 +10,6 @@ public interface IPaginationService<T>
         int pageSize,
         string sortColumn,
         string sortDirection,
-        string searchValue);
+        string searchValue,
+        string userId);
 }

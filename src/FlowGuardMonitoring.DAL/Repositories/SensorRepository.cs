@@ -11,11 +11,12 @@ public class SensorRepository(FlowGuardMonitoringContext context) : IRepository<
         return await context.Sensors.ToListAsync();
     }
 
-    public async Task<List<Sensor>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue)
+    public async Task<List<Sensor>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue, string userId)
     {
         // Start with the base query
         var query = context.Sensors
-            .Include(s => s.Site) // Assuming a Sensor has a relationship with Site
+            .Include(s => s.Site)
+            .Where(s => s.Site.UserId == userId)
             .AsQueryable();
 
         // Apply search filter if provided
@@ -85,9 +86,11 @@ public class SensorRepository(FlowGuardMonitoringContext context) : IRepository<
         }
     }
 
-    public int GetCount(string searchValue)
+    public int GetCount(string userId, string searchValue)
     {
-        IQueryable<Sensor>? query = context.Sensors.AsQueryable();
+        IQueryable<Sensor>? query = context.Sensors
+            .Where(s => s.Site.UserId == userId)
+            .AsQueryable();
 
         if (!string.IsNullOrEmpty(searchValue))
         {

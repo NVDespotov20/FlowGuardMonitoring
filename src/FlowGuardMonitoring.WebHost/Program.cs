@@ -27,7 +27,7 @@ public class Program
         builder.Services.AddScoped<IPaginationService<Site>, PaginationService<Site>>();
         builder.Services.AddScoped<IPaginationService<Sensor>, PaginationService<Sensor>>();
         builder.Services.AddScoped<IPaginationService<Measurement>, PaginationService<Measurement>>();
-        builder.Services.AddScoped<StatsService>();
+        builder.Services.AddScoped<StatisticsService>();
 
         builder.Services.AddHttpClient("MeasurementApi", client =>
         {

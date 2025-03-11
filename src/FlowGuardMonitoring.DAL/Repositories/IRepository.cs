@@ -7,10 +7,10 @@ public interface IRepository<T>
     where T : class
 {
     Task<List<T>> GetAllAsync();
-    Task<List<T>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue);
+    Task<List<T>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue, string userId);
     Task<T?> GetByIdAsync(int id);
     Task AddAsync(T entity);
     Task UpdateAsync(T entity);
     Task DeleteAsync(int id);
-    public int GetCount(string searchValue = "");
+    public int GetCount(string userId, string searchValue = "");
 }

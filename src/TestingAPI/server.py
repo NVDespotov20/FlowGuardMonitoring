@@ -107,13 +107,13 @@ def generate_measurement(sensor):
 
     elif sensor_type == "Level":
         depth = sensor.get("location", {}).get("depth", 10)
-        data["value"] = str(round(random.uniform(0, depth), 2))
+        data["value"] = str(round(random.uniform(0, depth), 2)) + "m"
 
     elif sensor_type == "Temperature":
-        data["value"] = str(round(random.uniform(0, 35), 2))
+        data["value"] = str(round(random.uniform(0, 35), 2)) + "°C"
 
     elif sensor_type == "Quality":
-        data["value"] = str(random.randint(0, 100))
+        data["value"] = str(random.randint(0, 100)) + "%"
 
     elif sensor_type == "Contaminants":
         possible_contaminants = ["Lead", "Mercury", "Arsenic", "Nitrates", "Pesticides", "Cadmium"]

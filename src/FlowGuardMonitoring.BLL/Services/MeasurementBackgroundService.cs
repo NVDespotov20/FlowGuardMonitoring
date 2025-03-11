@@ -32,28 +32,7 @@ public class MeasurementBackgroundService : BackgroundService
         this.logger = logger;
     }
 
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        this.logger.LogInformation("MeasurementBackgroundService is starting.");
-
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            try
-            {
-                await this.FetchAndSaveMeasurementsAsync(stoppingToken);
-            }
-            catch (Exception ex)
-            {
-                this.logger.LogError(ex, "An error occurred while fetching and saving measurements.");
-            }
-
-            await Task.Delay(this.interval, stoppingToken);
-        }
-
-        this.logger.LogInformation("MeasurementBackgroundService is stopping.");
-    }
-
-    private async Task FetchAndSaveMeasurementsAsync(CancellationToken stoppingToken)
+    internal async Task FetchAndSaveMeasurementsAsync(CancellationToken stoppingToken)
     {
         using var scope = this.serviceScopeFactory.CreateScope();
         var sensorRepository = scope.ServiceProvider.GetRequiredService<IRepository<Sensor>>();
@@ -93,6 +72,27 @@ public class MeasurementBackgroundService : BackgroundService
                 this.logger.LogError($"Failed to fetch measurement for sensor {sensor.SensorId}. Status code: {response.StatusCode}");
             }
         }
+    }
+
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        this.logger.LogInformation("MeasurementBackgroundService is starting.");
+
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            try
+            {
+                await this.FetchAndSaveMeasurementsAsync(stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                this.logger.LogError(ex, "An error occurred while fetching and saving measurements.");
+            }
+
+            await Task.Delay(this.interval, stoppingToken);
+        }
+
+        this.logger.LogInformation("MeasurementBackgroundService is stopping.");
     }
 
     private Measurement MapDtoToMeasurement(MeasurementDto dto, int sensorId)

@@ -19,6 +19,6 @@ public class Site
 
     public ICollection<Sensor> Sensors { get; set; } = new List<Sensor>();
 
-    public required string UserId { get; set; } = null!;
-    public required User User { get; set; }
+    public required string UserId { get; set; }
+    public User? User { get; set; }
 }

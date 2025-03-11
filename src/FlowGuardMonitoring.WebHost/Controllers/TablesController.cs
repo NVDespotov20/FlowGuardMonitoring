@@ -16,14 +16,17 @@ public class TablesController : Controller
     private readonly IPaginationService<Sensor> sensorPagination;
     private readonly IPaginationService<Site> sitesPagination;
     private readonly IPaginationService<Measurement> measurementsPagination;
+    private readonly ICurrentUser currentUser;
     public TablesController(
         IPaginationService<Sensor> sensorPagination,
         IPaginationService<Site> sitesPagination,
-        IPaginationService<Measurement> measurementsPagination)
+        IPaginationService<Measurement> measurementsPagination,
+        ICurrentUser currentUser)
     {
         this.sensorPagination = sensorPagination;
         this.sitesPagination = sitesPagination;
         this.measurementsPagination = measurementsPagination;
+        this.currentUser = currentUser;
     }
 
     public async Task<ActionResult> Sensors()
@@ -47,7 +50,12 @@ public class TablesController : Controller
         int pageNumber = (request.Start / request.Length) + 1;
 
         var measurements = await this.measurementsPagination.GetPaginatedRecords(
-            pageNumber, request.Length, request.SortColumn, request.SortDirection, request.SearchValue);
+            pageNumber,
+            request.Length,
+            request.SortColumn,
+            request.SortDirection,
+            request.SearchValue,
+            this.currentUser.UserId);
 
         var viewModel = measurements.Records.Select(m => new MeasurementViewModel
         {
@@ -74,7 +82,12 @@ public class TablesController : Controller
         int pageNumber = (request.Start / request.Length) + 1;
 
         var sensors = await this.sensorPagination.GetPaginatedRecords(
-            pageNumber, request.Length, request.SortColumn, request.SortDirection, request.SearchValue);
+            pageNumber,
+            request.Length,
+            request.SortColumn,
+            request.SortDirection,
+            request.SearchValue,
+            this.currentUser.UserId);
 
         var viewModel = sensors.Records.Select(s => new SensorViewModel
         {
@@ -102,7 +115,12 @@ public class TablesController : Controller
         int pageNumber = (request.Start / request.Length) + 1;
 
         var sites = await this.sitesPagination.GetPaginatedRecords(
-            pageNumber, request.Length, request.SortColumn, request.SortDirection, request.SearchValue);
+            pageNumber,
+            request.Length,
+            request.SortColumn,
+            request.SortDirection,
+            request.SearchValue,
+            this.currentUser.UserId);
 
         var viewModel = sites.Records.Select(s => new SiteViewModel
         {
