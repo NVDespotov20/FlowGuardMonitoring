@@ -7,15 +7,36 @@
 
 <div class="col-md-12">
     <div class="card">
-        <div class="card-header">
-            <h4 class="card-title">Sensors</h4>
+                <!-- Modal structure -->
+        <div class="modal fade" id="addSensorModal" tabindex="-1" aria-labelledby="addSensorModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addSensorModalLabel">Add Sensor</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Render partial view and pass the AddSensorViewModel -->
+                        @await Html.PartialAsync("Management/_AddSensorModal", new FlowGuardMonitoring.WebHost.Models.Management.AddSensorViewModel())
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header row">
+            <h4 class="card-title col-md-6">Sensors</h4>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary float-md-end" data-bs-toggle="modal" data-bs-target="#addSensorModal">
+                    <i class="fas fa-plus"></i>
+                    Add Sensor
+                </button>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table
                     id="table"
-                    class="display table table-striped table-hover"
-                >
+                    class="display table table-striped table-hover">
                     <thead>
                     <tr>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Name)</th>

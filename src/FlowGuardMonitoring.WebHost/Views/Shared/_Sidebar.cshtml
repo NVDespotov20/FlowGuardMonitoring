@@ -39,46 +39,22 @@
           </a>
         </li>
         <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#sensorData">
-            <i class="fas fa-layer-group"></i>
-            <p>Sensor Data</p>
-            <span class="caret"></span>
+          <a href="@Url.Action("Sensors", "Tables")">
+            <i class="fa-solid fa-gauge"></i>
+            <p>Sensors</p>
           </a>
-          <div class="collapse" id="sensorData">
-            <ul class="nav nav-collapse">
-              <li>
-                <a href="@Url.Action("Sensors", "Tables")">
-                  <span class="sub-item">Sensors</span>
-                </a>
-              </li>
-              <li>
-                <a href="@Url.Action("Sites", "Tables")">
-                  <span class="sub-item">Locations</span>
-                </a>
-              </li>
-              <li>
-                <a href="@Url.Action("Measurements", "Tables")">
-                  <span class="sub-item">Measurements</span>
-                </a>
-              </li>
-            </ul>
-          </div>
         </li>
         <li class="nav-item">
-          <a data-bs-toggle="collapse" href="#management">
-            <i class="fas fa-layer-group"></i>
-            <p>Manage Assets</p>
-            <span class="caret"></span>
+          <a href="@Url.Action("Sites", "Tables")">
+            <i class="fa-solid fa-location-dot"></i>
+            <p>Locations</p>
           </a>
-          <div class="collapse" id="management">
-            <ul class="nav nav-collapse">
-              <li>
-                <a href="@Url.Action("AddSensor", "Management")">
-                  <span class="sub-item">Add Sensor</span>
-                </a>
-              </li>
-            </ul>
-          </div>
+        </li>
+        <li class="nav-item">
+          <a href="@Url.Action("Measurements", "Tables")">
+            <i class="fa-solid fa-chart-line"></i>
+            <p class="sub-item">Measurements</p>
+          </a>
         </li>
       </ul>
     </div>

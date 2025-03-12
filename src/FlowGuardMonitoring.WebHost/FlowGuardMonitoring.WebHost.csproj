@@ -6,7 +6,6 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableNETAnalyzers>true</EnableNETAnalyzers>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-        <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
         <CodeAnalysisRuleSet>../FlowGuardMonitoring.ruleset</CodeAnalysisRuleSet>
     </PropertyGroup>
 
@@ -59,6 +58,11 @@
       <_ContentIncludedByDefault Remove="wwwroot\img\undraw\undraw_Taken_if77.svg" />
       <_ContentIncludedByDefault Remove="wwwroot\img\undraw\undraw_update_uxn2.svg" />
       <_ContentIncludedByDefault Remove="wwwroot\img\undraw\undraw_upgrade_06a0.svg" />
+      <_ContentIncludedByDefault Remove="Views\Management\_AddSensorModal.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Shared\Management\_AddSensorModal.cshtml" />
     </ItemGroup>
 
 </Project>
