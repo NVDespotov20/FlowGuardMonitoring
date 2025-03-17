@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>FlowGuardMonitoring</title>
+    <title>@ViewData["Title"] | FlowGuard Monitoring</title>
     <meta
         content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
         name="viewport"
@@ -36,7 +36,7 @@
     <!-- CSS Files -->
     <link rel="stylesheet" href="~/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/plugins.min.css" />
-    <link rel="stylesheet" href="~/css/kaiadmin.min.css" />
+    <link rel="stylesheet" href="~/css/flowguard.min.css" />
 
 </head>
 <body>
@@ -49,7 +49,7 @@
                 <div class="logo-header" data-background-color="dark">
                     <a asp-page="/Home/Index" class="logo">
                         <img
-                            src="~/img/kaiadmin/logo_light.svg"
+                            src="~/img/logo.svg"
                             alt="navbar brand"
                             class="navbar-brand"
                             height="20"/>
@@ -109,15 +109,16 @@
 
 <!-- Sweet Alert -->
 <script src="~/js/plugin/sweetalert/sweetalert.min.js"></script>
-<script type="text/javascript" src="https://unpkg.com/default-passive-events"></script>
+<script type="text/javascript" src="~/js/plugin/default-passive-events/dist/index.js"></script>
 
-<!-- Kaiadmin JS -->
-<script src="~/js/kaiadmin.min.js"></script>
+<!-- FlowGuard JS -->
+<script src="~/js/flowguard.js"></script>
+
 <partial name="_LogoutModal"/>
 
 @if (ViewData["ScriptPath"] != null)
 {
-    <partial name="../@ViewData["ScriptPath"]"/>
+<partial name="../@ViewData["ScriptPath"]"/>
 }
 </body>
 </html>

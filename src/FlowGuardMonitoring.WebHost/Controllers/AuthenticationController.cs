@@ -1,8 +1,11 @@
+using System.Diagnostics;
 using System.Text.Encodings.Web;
+using System.Web;
 using Essentials.Extensions;
 using FlowGuardMonitoring.BLL.Services;
 using FlowGuardMonitoring.DAL.Models;
 using FlowGuardMonitoring.WebHost.Extentions;
+using FlowGuardMonitoring.WebHost.Models;
 using FlowGuardMonitoring.WebHost.Models.Authentication;
 using FlowGuardMonitoring.WebHost.Resources;
 using Microsoft.AspNetCore.Authentication;
@@ -10,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FlowGuardMonitoring.WebHost.Controllers;
 public class AuthenticationController : Controller
@@ -104,43 +108,50 @@ public class AuthenticationController : Controller
             return this.RedirectToDefault();
         }
 
-        if (this.ModelState.IsValid)
+        if (!this.ModelState.IsValid || model.Email.IsNullOrEmpty())
         {
-            var result = await this.userManager.CreateAsync(
-                new User
-                {
-                    FirstName = model.FirstName!,
-                    LastName = model.LastName!,
-                    UserName = model.Email,
-                    Email = model.Email,
-                },
-                model.Password!);
+            return this.View(model);
+        }
 
-            if (result.Succeeded)
-            {
-                var user = await this.userManager.FindByEmailAsync(model.Email!);
-                if (user == null)
-                {
-                    this.ModelState.AssignIdentityErrors(result.Errors);
-                    return this.RedirectToDefault();
-                }
+        var existingUser = await this.userManager.FindByEmailAsync(model.Email!);
+        if (existingUser != null)
+        {
+            this.ModelState.AddModelError(string.Empty, AuthLocals.EmailAlreadyUsedErrorMsg);
+            return this.View(model);
+        }
 
-                var emailConfirmationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
-                var encodedToken = UrlEncoder.Default.Encode(emailConfirmationToken);
-                var emailConfirmationUrl = this.HttpContext
-                    .GetAbsoluteRoute($"/email-confirm?email={user.Email}&token={encodedToken}");
-                var emailResult = await this.emailService.SendEmailConfirmationAsync(
-                    user.Email!,
-                    emailConfirmationUrl);
-                this.logger.LogInformation("Email confirmation send result: {Result}", emailResult.ToString());
+        var user = new User()
+        {
+            Email = model.Email,
+            UserName = model.Email,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+        };
 
-                return this.RedirectToAction(nameof(this.Login));
-            }
-
+        var result = await this.userManager.CreateAsync(user, model.Password!);
+        if (!result.Succeeded)
+        {
             this.ModelState.AssignIdentityErrors(result.Errors);
         }
 
-        return this.View(model);
+        var emailVerificationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);
+        var encodedToken = HttpUtility.UrlEncode(emailVerificationToken);
+        var emailVerificationUrl =
+            this.Url.ActionLink(
+                nameof(this.ConfirmEmail),
+                "Authentication",
+                new
+                {
+                    email = user.Email,
+                    token = encodedToken,
+                });
+
+        if (emailVerificationUrl != null && user.Email != null)
+        {
+            await this.emailService.SendEmailConfirmationAsync(user.Email, emailVerificationUrl);
+        }
+
+        return this.RedirectToAction(nameof(this.Login));
     }
 
     [HttpGet("/forgot-password")]
@@ -280,14 +291,14 @@ public class AuthenticationController : Controller
             return this.NotFound("User not found");
         }
 
-        var result = await this.userManager.ConfirmEmailAsync(user, token);
+        var result = await this.userManager.ConfirmEmailAsync(user, HttpUtility.UrlDecode(token));
         if (result.Succeeded)
         {
             return this.View("EmailConfirmed");
         }
         else
         {
-            return this.View("Error");
+            return this.View("Error", new ErrorViewModel { RequestId = this.HttpContext.TraceIdentifier });
         }
     }
 

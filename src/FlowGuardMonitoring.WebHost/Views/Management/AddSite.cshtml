@@ -1,0 +1,51 @@
+@using FlowGuardMonitoring.WebHost.Models.Management
+@model FlowGuardMonitoring.WebHost.Models.Tables.SiteViewModel
+
+<div>
+    <div class="page-header">
+        <h3 class="fw-bold mb-3">Add New Location</h3>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Location Details</div>
+                </div>
+                <div class="card-body">
+                    <form asp-action="AddSite" asp-controller="Management" method="post" class="form-horizontal" id="CreateSiteForm">
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-group form-group-default">
+                            <label>Location Name</label>
+                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "New Site Name" })
+                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Name)</div>
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Description</label>
+                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 5, placeholder = "Site Description" })
+                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Description)</div>
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Latitude</label>
+                            @Html.TextBoxFor(m => m.Latitude, new { @class = "form-control", placeholder = "Latitude" })
+                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Latitude)</div>
+                        </div>
+
+                        <div class="form-group form-group-default">
+                            <label>Longitude</label>
+                            @Html.TextBoxFor(m => m.Longitude, new { @class = "form-control", placeholder = "Longitude" })
+                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Longitude)</div>
+                        </div>
+
+                        <div class="card-action">
+                            <button type="submit" class="btn btn-success">Add</button>
+                            <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Sites", "Tables")'">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

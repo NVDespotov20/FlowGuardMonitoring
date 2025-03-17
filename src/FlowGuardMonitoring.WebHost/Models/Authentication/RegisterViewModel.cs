@@ -8,11 +8,11 @@ public class RegisterViewModel
     [Required(
         ErrorMessageResourceType = typeof(AuthLocals),
         ErrorMessageResourceName = "FirstNameRequiredErrorMsg")]
-    public string? FirstName { get; set; }
+    public string FirstName { get; set; } = string.Empty;
     [Required(
         ErrorMessageResourceType = typeof(AuthLocals),
         ErrorMessageResourceName = "LastNameRequiredErrorMsg")]
-    public string? LastName { get; set; }
+    public string LastName { get; set; } = string.Empty;
     [Required(
         ErrorMessageResourceType = typeof(AuthLocals),
         ErrorMessageResourceName = "EmailFieldRequiredErrorMsg")]

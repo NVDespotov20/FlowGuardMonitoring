@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FlowGuardMonitoring.WebHost.Controllers;
 
@@ -32,11 +33,6 @@ public class ManagementController : Controller
 
     public async Task<IActionResult> AddSensor()
     {
-        // Debug: inspect the claims from HttpContext
-        var claims = this.HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
-        // You could log these or temporarily output them to the debug console.
-        System.Diagnostics.Debug.WriteLine("User Claims: " + string.Join(", ", claims.Select(c => $"{c.Type}: {c.Value}")));
-
         await this.PopulateSites();
         return this.View(new AddSensorViewModel());
     }
@@ -54,15 +50,15 @@ public class ManagementController : Controller
         if (model.Sensor.SiteName == "new")
         {
             if (model.Site == null ||
-                string.IsNullOrWhiteSpace(model.Site.Name) ||
-                string.IsNullOrWhiteSpace(model.Site.Description))
+                model.Site.Name.IsNullOrEmpty() ||
+                model.Site.Description.IsNullOrEmpty())
             {
                 this.ModelState.AddModelError("Site", "Please provide complete details for the new site.");
                 await this.PopulateSites();
                 return this.View(model);
             }
 
-            var newSiteEntity = new Site
+            var site = new Site
             {
                 Name = model.Site.Name,
                 Description = model.Site.Description,
@@ -70,10 +66,8 @@ public class ManagementController : Controller
                 Longitude = model.Site.Longitude,
                 UserId = this.currentUser.UserId,
             };
-
-            await this.siteRepository.AddAsync(newSiteEntity);
-
-            model.Sensor.SiteName = newSiteEntity.SiteId.ToString();
+            await this.siteRepository.AddAsync(site);
+            model.Sensor.SiteName = site.SiteId.ToString();
         }
 
         if (!int.TryParse(model.Sensor.SiteName, out int siteId))
@@ -83,7 +77,7 @@ public class ManagementController : Controller
             return this.View(model);
         }
 
-        var sensorEntity = new Sensor
+        var sensor = new Sensor
         {
             Name = model.Sensor.Name,
             Type = model.Sensor.Type,
@@ -92,10 +86,36 @@ public class ManagementController : Controller
             SiteId = siteId,
             Site = (await this.siteRepository.GetByIdAsync(siteId))!,
         };
+        await this.sensorRepository.AddAsync(sensor);
+        return this.RedirectToAction("Sensors", "Tables");
+    }
 
-        await this.sensorRepository.AddAsync(sensorEntity);
+    [HttpGet]
+    public IActionResult AddSite()
+    {
+        return this.View();
+    }
 
-        return this.RedirectToAction("Index", "Home");
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddSite(SiteViewModel model)
+    {
+        if (!this.ModelState.IsValid)
+        {
+            return this.View(model);
+        }
+
+        var site = new Site
+        {
+            Name = model.Name,
+            Description = model.Description,
+            Latitude = model.Latitude,
+            Longitude = model.Longitude,
+            UserId = this.currentUser.UserId,
+        };
+
+        await this.siteRepository.AddAsync(site);
+        return this.RedirectToAction("Sites", "Tables");
     }
 
     private async Task PopulateSites()

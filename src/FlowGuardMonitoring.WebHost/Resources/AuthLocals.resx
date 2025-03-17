@@ -141,4 +141,7 @@
     <data name="PasswordRequiresDigitErrorMsg" xml:space="preserve">
         <value>Паролата трябва да съдържа цифра</value>
     </data>
+    <data name="EmailAlreadyUsedErrorMsg" xml:space="preserve">
+        <value>Вече има профил с този имейл.</value>
+    </data>
 </root>

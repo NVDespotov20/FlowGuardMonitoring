@@ -59,10 +59,13 @@
       <_ContentIncludedByDefault Remove="wwwroot\img\undraw\undraw_update_uxn2.svg" />
       <_ContentIncludedByDefault Remove="wwwroot\img\undraw\undraw_upgrade_06a0.svg" />
       <_ContentIncludedByDefault Remove="Views\Management\_AddSensorModal.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Shared\Management\_AddSensorModal.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Management\AddSensor.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Shared\Management\_AddSensor.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Views\Shared\Management\_AddSensorModal.cshtml" />
+      <AdditionalFiles Include="Views\Management\AddSensor.cshtml" />
     </ItemGroup>
 
 </Project>

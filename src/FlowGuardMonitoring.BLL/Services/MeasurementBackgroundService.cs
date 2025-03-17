@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Formats.Asn1;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
@@ -37,12 +39,11 @@ public class MeasurementBackgroundService : BackgroundService
         using var scope = this.serviceScopeFactory.CreateScope();
         var sensorRepository = scope.ServiceProvider.GetRequiredService<IRepository<Sensor>>();
         var measurementRepository = scope.ServiceProvider.GetRequiredService<IRepository<Measurement>>();
-
         var client = this.httpClientFactory.CreateClient("MeasurementApi");
 
         List<Sensor> sensors = await sensorRepository.GetAllAsync();
 
-        if (sensors == null || !sensors.Any())
+        if (!sensors.Any())
         {
             this.logger.LogWarning("No sensors found in the database.");
             return;
@@ -51,12 +52,10 @@ public class MeasurementBackgroundService : BackgroundService
         foreach (var sensor in sensors)
         {
             var response = await client.GetAsync($"http://127.0.0.1:5000/sensor/{sensor.SensorId}/measurement", stoppingToken);
-
             if (response.IsSuccessStatusCode)
             {
-                var jsonResponse = await response.Content.ReadAsStringAsync(stoppingToken);
-                var measurementDto = JsonSerializer.Deserialize<MeasurementDto>(jsonResponse);
-
+                var json = await response.Content.ReadAsStringAsync(stoppingToken);
+                var measurementDto = JsonSerializer.Deserialize<MeasurementDto>(json);
                 if (measurementDto != null)
                 {
                     var measurement = this.MapDtoToMeasurement(measurementDto, sensor.SensorId);

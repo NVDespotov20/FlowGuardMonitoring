@@ -290,5 +290,11 @@ namespace FlowGuardMonitoring.WebHost.Resources {
                 return ResourceManager.GetString("PasswordRequiresDigitErrorMsg", resourceCulture);
             }
         }
+        
+        internal static string EmailAlreadyUsedErrorMsg {
+            get {
+                return ResourceManager.GetString("EmailAlreadyUsedErrorMsg", resourceCulture);
+            }
+        }
     }
 }

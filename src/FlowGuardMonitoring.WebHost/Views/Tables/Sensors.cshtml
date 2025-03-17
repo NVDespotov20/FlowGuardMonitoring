@@ -7,29 +7,13 @@
 
 <div class="col-md-12">
     <div class="card">
-                <!-- Modal structure -->
-        <div class="modal fade" id="addSensorModal" tabindex="-1" aria-labelledby="addSensorModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addSensorModalLabel">Add Sensor</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <!-- Render partial view and pass the AddSensorViewModel -->
-                        @await Html.PartialAsync("Management/_AddSensorModal", new FlowGuardMonitoring.WebHost.Models.Management.AddSensorViewModel())
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div class="card-header row">
             <h4 class="card-title col-md-6">Sensors</h4>
             <div class="col-md-6">
-                <button type="button" class="btn btn-primary float-md-end" data-bs-toggle="modal" data-bs-target="#addSensorModal">
+                <a type="button" class="btn btn-primary float-md-end" href="@Url.ActionLink("AddSensor", "Management")">
                     <i class="fas fa-plus"></i>
                     Add Sensor
-                </button>
+                </a>
             </div>
         </div>
         <div class="card-body">
@@ -42,7 +26,7 @@
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Name)</th>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Type)</th>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.InstallationDate)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.IsActive)</th>
+                        <th>Active</th>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.SiteName)</th>
                     </tr>
                     </thead>
@@ -51,18 +35,27 @@
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Name)</th>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.Type)</th>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.InstallationDate)</th>
-                        <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.IsActive)</th>
+                        <th>Active</th>
                         <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel.SiteName)</th>
-                    </tr>
+                    </tr>   
                     </tfoot>
                     <tbody>
                     @foreach (var sensor in Model.Records)
                     {
                         <tr>
                             <td>@sensor.Name</td>
-                            <td>@sensor.Type</td>
+                            <td>@(Enum.GetName(sensor.Type.GetType(), sensor.Type))</td>
                             <td>@sensor.InstallationDate.ToShortDateString()</td>
-                            <td>@(sensor.IsActive ? "Active" : "Inactive")</td>
+                            <td>
+                                @if (sensor.IsActive)
+                                {
+                                    <i class="fa-square-check"></i>
+                                }
+                                else
+                                {
+                                    <i class="fa-square-xmark"></i>
+                                }
+                            </td>
                             <td>@sensor.SiteName</td>
                         </tr>
                     }

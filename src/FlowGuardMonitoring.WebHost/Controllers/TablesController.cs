@@ -89,10 +89,10 @@ public class TablesController : Controller
             request.SearchValue,
             this.currentUser.UserId);
 
-        var viewModel = sensors.Records.Select(s => new SensorViewModel
+        var viewModel = sensors.Records.Select(s => new
         {
             Name = s.Name,
-            Type = s.Type,
+            Type = s.Type.ToString(),
             InstallationDate = s.InstallationDate,
             IsActive = s.IsActive,
             SiteName = s.Site.Name,
