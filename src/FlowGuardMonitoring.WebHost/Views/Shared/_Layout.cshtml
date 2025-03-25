@@ -88,14 +88,18 @@
 <!-- jQuery Scrollbar -->
 <script src="~/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 
-<!-- Chart JS -->
-<script src="~/js/plugin/chart.js/chart.min.js"></script>
+<!-- AG chart -->
+<script src="https://cdn.jsdelivr.net/npm/ag-charts-community@11.1.0/dist/umd/ag-charts-community.min.js"></script>
 
 <!-- jQuery Sparkline -->
 <script src="~/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
 
-<!-- Chart Circle -->
-<script src="~/js/plugin/chart-circle/circles.min.js"></script>
+<!-- Day.js -->
+<script src="~/js/plugin/day.js/dayjs.min.js"></script>
+<script src="~/js/plugin/day.js/relativetime.min.js"></script>
+<script>
+    dayjs.extend(dayjs_plugin_relativeTime);
+</script>
 
 <!-- Datatables -->
 <script src="~/js/plugin/datatables/datatables.min.js"></script>

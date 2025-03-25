@@ -103,14 +103,14 @@ def generate_measurement(sensor):
     sensor_type = sensor.get("type")
 
     if sensor_type == "Ph":
-        data["value"] = str(round(random.uniform(6.5, 8.5), 2))
+        data["value"] = str(round(random.uniform(5.5, 8.5), 2))
 
     elif sensor_type == "Level":
         depth = sensor.get("location", {}).get("depth", 10)
         data["value"] = str(round(random.uniform(0, depth), 2)) + "m"
 
     elif sensor_type == "Temperature":
-        data["value"] = str(round(random.uniform(0, 35), 2)) + "°C"
+        data["value"] = str(round(random.uniform(-10, 40), 2)) + "°C"
 
     elif sensor_type == "Quality":
         data["value"] = str(random.randint(0, 100)) + "%"

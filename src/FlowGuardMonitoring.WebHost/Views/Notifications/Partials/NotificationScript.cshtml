@@ -1,0 +1,92 @@
+<script>
+    $(document).ready(function () {
+        var table = $("#notificationsTable").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "order": [[2, 'desc']],
+            "orderMulti": false,
+            "ajax": {
+                "url": "/Notifications/GetNotifications",
+                "type": "POST",
+                "dataType": "json",
+                "contentType": "application/json",
+                "data": function (d) {
+                    return JSON.stringify({
+                        draw: d.draw,
+                        start: d.start,
+                        length: d.length,
+                        sortColumn: d.columns[d.order[0].column].data,
+                        sortDirection: d.order[0].dir,
+                        searchValue: d.search.value
+                    });
+                }
+            },
+            "columns": [
+                {
+                    "data": "type",
+                    "render": function (data, type, row) {
+                        let icon = '';
+                        switch (data) {
+                            case 'Warning': 
+                                icon = 'fa-triangle-exclamation';
+                                break;
+                            case 'Critical':
+                                icon = 'fa-radiation';
+                                break;
+                            case 'Error':
+                                icon = 'fa-circle-xmark';
+                                break;
+                            case 'Info':
+                                icon = 'fa-info-circle';
+                                break;
+                        }
+                        return `<div>
+                                    <i class="fa notif-icon ${icon} fa-3x"></i>
+                                </div>`;
+                    }
+                },
+                {
+                    "data": "message",
+                    "render": function (data, type, row) {
+                        if (!row.isRead) {
+                            return `<strong>${data}</strong>`;
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                {
+                    "data": "time", 
+                    "render": function (data, type, row) {
+                        return dayjs(data).fromNow();
+                    }
+                },
+                {
+                    "data": "notificationId",
+                    "visible": false
+                }
+            ],
+            "createdRow": function(row, data, dataIndex) {
+                $(row).addClass('notif-'+data.type.toLowerCase());
+            }
+        });
+        $('#notificationsTable tbody').on('click', 'tr', function () {
+            var row = table.row(this);
+            var data = row.data();
+            var notificationId = data.notificationId;
+
+            $.ajax({
+                url: '/api/notifications/mark-as-read?notificationId=' + notificationId,
+                type: 'PUT',
+                success: function () {
+                    data.isRead = true;
+                    row.data(data).invalidate();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Failed to mark notification as read:", error);
+                }
+            });
+        });
+    });
+</script>

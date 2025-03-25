@@ -45,7 +45,47 @@ namespace FlowGuardMonitoring.DAL.Migrations
 
                     b.HasIndex("SensorId");
 
-                    b.ToTable("Measurements", (string)null);
+                    b.ToTable("Measurements");
+                });
+
+            modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.Notification", b =>
+                {
+                    b.Property<int>("NotificationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("NotificationId"));
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("NotificationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.Sensor", b =>
@@ -78,7 +118,7 @@ namespace FlowGuardMonitoring.DAL.Migrations
 
                     b.HasIndex("SiteId");
 
-                    b.ToTable("Sensors", (string)null);
+                    b.ToTable("Sensors");
                 });
 
             modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.Site", b =>
@@ -113,7 +153,7 @@ namespace FlowGuardMonitoring.DAL.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Sites", (string)null);
+                    b.ToTable("Sites");
                 });
 
             modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.User", b =>
@@ -335,6 +375,17 @@ namespace FlowGuardMonitoring.DAL.Migrations
                     b.Navigation("Sensor");
                 });
 
+            modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.Notification", b =>
+                {
+                    b.HasOne("FlowGuardMonitoring.DAL.Models.User", "User")
+                        .WithMany("Notifications")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.Sensor", b =>
                 {
                     b.HasOne("FlowGuardMonitoring.DAL.Models.Site", "Site")
@@ -420,6 +471,8 @@ namespace FlowGuardMonitoring.DAL.Migrations
 
             modelBuilder.Entity("FlowGuardMonitoring.DAL.Models.User", b =>
                 {
+                    b.Navigation("Notifications");
+
                     b.Navigation("Sites");
                 });
 #pragma warning restore 612, 618

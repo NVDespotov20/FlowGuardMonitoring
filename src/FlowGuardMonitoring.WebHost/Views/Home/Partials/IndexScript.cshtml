@@ -1,132 +1,59 @@
 ﻿<script>
-    function generateGraphForSensor(sensorId) {
-        fetch('/api/SensorData/monthly?sensorId=1&month=5&year=2025')
+    var sensorId = 0;
+    var year = 2025;
+
+    // Fetch data from the API
+    fetch(`/api/SensorData/yearly?sensorId=${sensorId}&year=${year}`)
         .then(response => response.json())
         .then(data => {
-            const days = data.map(d => d.Day);
-            const averages = data.map(d => d.Average !== null ? d.Average : 0);
+            // Process data for the chart
+            var chartData = data.map(d => ({
+                day: d.Day,         // Date in 'yyyy-MM-dd' format
+                average: d.Average  // Average value (null if no data)
+            }));
 
-            const ctx = document.getElementById('statisticsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: days,
-                    datasets: [{
-                        label: "Daily Average",
-                        borderColor: '#f3545d',
-                        pointBackgroundColor: 'rgba(243, 84, 93, 0.6)',
-                        pointRadius: 0,
-                        backgroundColor: 'rgba(243, 84, 93, 0.4)',
-                        legendColor: '#f3545d',
-                        fill: true,
-                        borderWidth: 2,
-                        data: averages
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    legend: {
-                        display: false
+            // Generate the chart using AG Charts
+            agCharts.AgChart.create({
+                container: document.getElementById('chart-container'),
+                data: chartData,
+                series: [{
+                    type: 'line',
+                    xKey: 'day',
+                    yKey: 'average',
+                    yName: 'Average Measurement',
+                    stroke: '#47a9ff',
+                    strokeWidth: 2,
+                    marker: {
+                        size: 5,
+                        fill: '#47a9ff',
+                        stroke: '#47a9ff'
                     },
-                    tooltips: {
-                        bodySpacing: 4,
-                        mode: "nearest",
-                        intersect: 0,
-                        position: "nearest",
-                        xPadding: 10,
-                        yPadding: 10,
-                        caretPadding: 10
-                    },
-                    layout: {
-                        padding: {left: 5, right: 5, top: 15, bottom: 15}
-                    },
-                    scales: {
-                        x: { title: { display: true, text: 'Day of Month' } },
-                        y: { title: { display: true, text: 'Average Value' } }
-                    },
-                    legendCallback: function (chart) {
-                        var text = [];
-                        text.push('<ul class="' + chart.id + '-legend html-legend">');
-                        for (var i = 0; i < chart.data.datasets.length; i++) {
-                            text.push('<li><span style="background-color:' + chart.data.datasets[i].legendColor + '"></span>');
-                            if (chart.data.datasets[i].label) {
-                                text.push(chart.data.datasets[i].label);
+                    tooltip: {
+                        renderer: function(params) {
+                            if (params.yValue === null) {
+                                return 'No data available for this day';
+                            } else {
+                                return 'Average: ' + params.yValue.toFixed(2);
                             }
-                            text.push('</li>');
                         }
-                        text.push('</ul>');
-                        return text.join('');
                     }
+                }],
+                axes: [
+                    {
+                        type: 'time',
+                        position: 'bottom',
+                        title: { text: 'Day of the Year' }
+                    },
+                    {
+                        type: 'number',
+                        position: 'left',
+                        title: { text: 'Average Value' }
+                    }
+                ],
+                legend: {
+                    enabled: false
                 }
             });
-        });
-    }
-
-    var myLegendContainer = document.getElementById("myChartLegend");
-
-    // generate HTML legend
-    myLegendContainer.innerHTML = statisticsChart.generateLegend();
-
-    // bind onClick event to all LI-tags of the legend
-    var legendItems = myLegendContainer.getElementsByTagName('li');
-    for (var i = 0; i < legendItems.length; i += 1) {
-        legendItems[i].addEventListener("click", legendClickCallback, false);
-    }
-
-    var dailySalesChart = document.getElementById('dailySalesChart').getContext('2d');
-
-    var myDailySalesChart = new Chart(dailySalesChart, {
-        type: 'line',
-        data: {
-            labels:["January",
-                "February",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September"],
-            datasets:[ {
-                label: "Sales Analytics", fill: !0, backgroundColor: "rgba(255,255,255,0.2)", borderColor: "#fff", borderCapStyle: "butt", borderDash: [], borderDashOffset: 0, pointBorderColor: "#fff", pointBackgroundColor: "#fff", pointBorderWidth: 1, pointHoverRadius: 5, pointHoverBackgroundColor: "#fff", pointHoverBorderColor: "#fff", pointHoverBorderWidth: 1, pointRadius: 1, pointHitRadius: 5, data: [65, 59, 80, 81, 56, 55, 40, 35, 30]
-            }]
-        },
-        options : {
-            maintainAspectRatio:!1, legend: {
-                display: !1
-            }
-            , animation: {
-                easing: "easeInOutBack"
-            }
-            , scales: {
-                yAxes:[ {
-                    display:!1, ticks: {
-                        fontColor: "rgba(0,0,0,0.5)", fontStyle: "bold", beginAtZero: !0, maxTicksLimit: 10, padding: 0
-                    }
-                    , gridLines: {
-                        drawTicks: !1, display: !1
-                    }
-                }
-                ], xAxes:[ {
-                    display:!1, gridLines: {
-                        zeroLineColor: "transparent"
-                    }
-                    , ticks: {
-                        padding: -20, fontColor: "rgba(255,255,255,0.2)", fontStyle: "bold"
-                    }
-                }
-                ]
-            }
-        }
-    });
-
-    $("#activeUsersChart").sparkline([112,109,120,107,110,85,87,90,102,109,120,99,110,85,87,94], {
-        type: 'bar',
-        height: '100',
-        barWidth: 9,
-        barSpacing: 10,
-        barColor: 'rgba(255,255,255,.3)'
-    });
-
+        })
+        .catch(error => console.error('Error fetching sensor data:', error));
 </script>

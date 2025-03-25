@@ -3451,6 +3451,23 @@ label.error {
   padding: 12px 15px;
   text-align: center; }
 
+.notif-warning .notif-icon {
+  color: #D3D03C;
+}
+
+.notif-critical .notif-icon {
+  color: #721c24; /* Dark red for critical icons */
+}
+
+.notif-error .notif-icon {
+  color: #dc3545; /* Bright red for error icons */
+}
+
+/* Info notifications: blue icon */
+.notif-info .notif-icon {
+  color: #17a2b8; /* Blue for info icons */
+}
+
 .notif-box, .messages-notif-box {
   width: 280px;
   padding: 0 !important; }
@@ -3483,8 +3500,6 @@ label.error {
   width: 100%;
   height: 100%;
   border-radius: 50%; }
-.notif-box .notif-center a .notif-icon.notif-black, .notif-box .notif-center a .notif-icon.notif-primary, .notif-box .notif-center a .notif-icon.notif-secondary, .notif-box .notif-center a .notif-icon.notif-info, .notif-box .notif-center a .notif-icon.notif-success, .notif-box .notif-center a .notif-icon.notif-warning, .notif-box .notif-center a .notif-icon.notif-danger, .messages-notif-box .notif-center a .notif-icon.notif-black, .messages-notif-box .notif-center a .notif-icon.notif-primary, .messages-notif-box .notif-center a .notif-icon.notif-secondary, .messages-notif-box .notif-center a .notif-icon.notif-info, .messages-notif-box .notif-center a .notif-icon.notif-success, .messages-notif-box .notif-center a .notif-icon.notif-warning, .messages-notif-box .notif-center a .notif-icon.notif-danger {
-  color: #ffffff !important; }
 .notif-box .notif-center a .notif-icon.notif-black, .messages-notif-box .notif-center a .notif-icon.notif-black {
   background: #1a2035 !important; }
 .notif-box .notif-center a .notif-icon.notif-primary, .messages-notif-box .notif-center a .notif-icon.notif-primary {
@@ -3495,8 +3510,6 @@ label.error {
   background: #48ABF7 !important; }
 .notif-box .notif-center a .notif-icon.notif-success, .messages-notif-box .notif-center a .notif-icon.notif-success {
   background: #31CE36 !important; }
-.notif-box .notif-center a .notif-icon.notif-warning, .messages-notif-box .notif-center a .notif-icon.notif-warning {
-  background: #FFAD46 !important; }
 .notif-box .notif-center a .notif-icon.notif-danger, .messages-notif-box .notif-center a .notif-icon.notif-danger {
   background: #F25961 !important; }
 .notif-box .notif-center a .notif-icon i, .messages-notif-box .notif-center a .notif-icon i {

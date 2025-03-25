@@ -8,7 +8,7 @@ public class SensorRepository(FlowGuardMonitoringContext context) : IRepository<
 {
     public async Task<List<Sensor>> GetAllAsync()
     {
-        return await context.Sensors.ToListAsync();
+        return await context.Sensors.Include(s => s.Site).ToListAsync();
     }
 
     public async Task<List<Sensor>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue, string userId)
@@ -61,7 +61,9 @@ public class SensorRepository(FlowGuardMonitoringContext context) : IRepository<
 
     public async Task<Sensor?> GetByIdAsync(int id)
     {
-        return await context.Sensors.FindAsync(id);
+        return await context.Sensors
+            .Include(s => s.Site)
+            .FirstOrDefaultAsync(s => s.SensorId == id);
     }
 
     public async Task AddAsync(Sensor sensor)

@@ -15,6 +15,8 @@ public class FlowGuardMonitoringContext : IdentityDbContext<User>
     public DbSet<Sensor> Sensors { get; set; }
     public DbSet<Site> Sites { get; set; }
 
+    public DbSet<Notification> Notifications { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -42,5 +44,10 @@ public class FlowGuardMonitoringContext : IdentityDbContext<User>
             .HasOne(s => s.User)
             .WithMany(u => u.Sites)
             .HasForeignKey(s => s.UserId);
+
+        modelBuilder.Entity<Notification>()
+            .HasOne(n => n.User)
+            .WithMany(u => u.Notifications)
+            .HasForeignKey(n => n.UserId);
     }
 }

@@ -10,4 +10,5 @@ public class User : IdentityUser
     [MaxLength(50)]
     public string LastName { get; set; } = null!;
     public ICollection<Site> Sites { get; set; } = new List<Site>();
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }
