@@ -1,0 +1,118 @@
+@{
+    ViewData["Title"] = "Measurements";
+    Layout = "_Layout";
+    ViewData["ScriptPath"] = "/Statistics/Partials/SensorStatisticsScript";
+}
+
+<style>
+    .chart-container {
+        position: relative;
+        height: 350px;
+        max-height: 350px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .stats-row {
+        margin-top: 2rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="row mb-3">
+        <div class="col-12">
+            <a href="@Url.Action("Sensors", "Tables")" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Back to Sensors
+            </a>
+        </div>
+    </div>
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Sensor Data Chart</h4>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-secondary" id="timeRangeDay">Day</button>
+                        <button type="button" class="btn btn-outline-secondary" id="timeRangeWeek">Week</button>
+                        <button type="button" class="btn btn-outline-secondary" id="timeRangeMonth">Month</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <input type="hidden" id="sensorId" value="@ViewBag.SensorId"/>
+
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label">Start Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-calendar"></i>
+                                </span>
+                                <input type="text" class="form-control" id="startDate" placeholder="YYYY-MM-DDThh:mm"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">End Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-calendar"></i>
+                                </span>
+                                <input type="text" class="form-control" id="endDate" placeholder="YYYY-MM-DDThh:mm"/>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button id="fetchDataBtn" class="btn btn-primary w-100">
+                                <i class="bi bi-search me-2"></i>Fetch Data
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="sensorChart"></canvas>
+                        <div id="loadingOverlay" class="position-absolute top-0 start-0 w-100 h-100 bg-white bg-opacity-75 d-flex justify-content-center align-items-center d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row stats-row">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card border-0 bg-light mb-3">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Latest Value</h6>
+                                    <h4 id="latestValue">--</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card border-0 bg-light mb-3">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Average</h6>
+                                    <h4 id="averageValue">--</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card border-0 bg-light mb-3">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Min</h6>
+                                    <h4 id="minValue">--</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="card border-0 bg-light mb-3">
+                                <div class="card-body text-center">
+                                    <h6 class="text-muted mb-2">Max</h6>
+                                    <h4 id="maxValue">--</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

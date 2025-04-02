@@ -96,6 +96,7 @@ public class TablesController : Controller
             InstallationDate = s.InstallationDate,
             IsActive = s.IsActive,
             SiteName = s.Site.Name,
+            SensorId = s.SensorId,
         }).ToList();
 
         var jsonData = new

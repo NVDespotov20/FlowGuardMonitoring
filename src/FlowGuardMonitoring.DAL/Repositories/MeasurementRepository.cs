@@ -116,4 +116,20 @@ namespace FlowGuardMonitoring.DAL.Repositories;
                     m.Sensor.Name.Contains(searchValue) ||
                     m.Value.Contains(searchValue)));
         }
+
+        public async Task<List<Measurement>> GetChartElements(int sensorId, DateTime startDate, DateTime endDate)
+        {
+            var query = @"
+                    SELECT m.MeasurementId, m.Timestamp, m.Value, s.Type, s.SensorId
+                    FROM Measurements m
+                    INNER JOIN Sensors s ON m.SensorId = s.SensorId
+                    WHERE m.SensorId = @p0
+                    AND m.Timestamp BETWEEN @p1 AND @p2
+                    AND s.Type NOT IN (5, 0)
+                    ORDER BY m.Timestamp";
+
+            return await context.Measurements
+                .FromSqlRaw(query, sensorId, startDate, endDate)
+                .ToListAsync();
+        }
     }

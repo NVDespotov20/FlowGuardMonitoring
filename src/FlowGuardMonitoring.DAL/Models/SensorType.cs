@@ -2,10 +2,10 @@ namespace FlowGuardMonitoring.DAL.Models;
 
 public enum SensorType
 {
-    Unknown,
-    Ph,
-    Level,
-    Temperature,
-    Quality,
-    Contaminants,
+    Unknown = 0,
+    Ph = 1,
+    Level = 2,
+    Temperature = 3,
+    Quality = 4,
+    Contaminants = 5,
 }

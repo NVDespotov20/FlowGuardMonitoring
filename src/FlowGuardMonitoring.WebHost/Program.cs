@@ -26,6 +26,7 @@ public class Program
         builder.Services.AddScoped<IRepository<Site>, SiteRepository>();
         builder.Services.AddScoped<IRepository<Notification>, NotificationRepository>();
         builder.Services.AddScoped<NotificationRepository>();
+        builder.Services.AddScoped<MeasurementRepository>();
         builder.Services.AddScoped<IPaginationService<Site>, PaginationService<Site>>();
         builder.Services.AddScoped<IPaginationService<Sensor>, PaginationService<Sensor>>();
         builder.Services.AddScoped<IPaginationService<Measurement>, PaginationService<Measurement>>();

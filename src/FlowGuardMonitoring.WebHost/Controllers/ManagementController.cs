@@ -47,32 +47,9 @@ public class ManagementController : Controller
             return this.View(model);
         }
 
-        if (model.Sensor.SiteName == "new")
-        {
-            if (model.Site == null ||
-                model.Site.Name.IsNullOrEmpty() ||
-                model.Site.Description.IsNullOrEmpty())
-            {
-                this.ModelState.AddModelError("Site", "Please provide complete details for the new site.");
-                await this.PopulateSites();
-                return this.View(model);
-            }
-
-            var site = new Site
-            {
-                Name = model.Site.Name,
-                Description = model.Site.Description,
-                Latitude = model.Site.Latitude,
-                Longitude = model.Site.Longitude,
-                UserId = this.currentUser.UserId,
-            };
-            await this.siteRepository.AddAsync(site);
-            model.Sensor.SiteName = site.SiteId.ToString();
-        }
-
         if (!int.TryParse(model.Sensor.SiteName, out int siteId))
         {
-            this.ModelState.AddModelError("Sensor.SiteName", "Please select a valid site.");
+            this.ModelState.AddModelError("Sensor.SiteName", "Please select a valid location.");
             await this.PopulateSites();
             return this.View(model);
         }
@@ -122,8 +99,7 @@ public class ManagementController : Controller
     {
         var sites = new List<SelectListItem>
         {
-            new SelectListItem { Value = string.Empty, Text = "-- Select Site --" },
-            new() { Value = "new", Text = "Create New Site" },
+            new() { Value = string.Empty, Text = "-- Select Site --" },
         };
 
         var existingSites = (await this.siteRepository.GetAllAsync()).Select(s => new SelectListItem

@@ -1,0 +1,329 @@
+<script>
+  let chart;
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - 1);
+
+    flatpickr("#startDate", {
+      enableTime: true,
+      dateFormat: "Y-m-d\\TH:i",
+      defaultDate: startDate,
+      time_24hr: true
+    });
+
+    flatpickr("#endDate", {
+      enableTime: true,
+      dateFormat: "Y-m-d\\TH:i",
+      defaultDate: endDate,
+      time_24hr: true
+    });
+
+    // Initialize time range buttons
+    document.getElementById('timeRangeDay').addEventListener('click', () => {
+      setTimeRange(1);
+    });
+
+    document.getElementById('timeRangeWeek').addEventListener('click', () => {
+      setTimeRange(7);
+    });
+
+    document.getElementById('timeRangeMonth').addEventListener('click', () => {
+      setTimeRange(30);
+    });
+
+    getChart();
+  });
+
+  function setTimeRange(days) {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - days);
+
+    // Update flatpickr instances
+    document.querySelector("#startDate")._flatpickr.setDate(startDate);
+    document.querySelector("#endDate")._flatpickr.setDate(endDate);
+
+    // Fetch new data
+    getChart();
+  }
+
+  function getChart() {
+    const sensorId = document.getElementById('sensorId').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    if (!sensorId || !startDate || !endDate) {
+      alert('Please fill in all fields.');
+      return;
+    }
+
+    // Show loading overlay
+    document.getElementById('loadingOverlay').classList.remove('d-none');
+
+    fetchData(sensorId, startDate, endDate);
+  }
+
+  document.getElementById('fetchDataBtn').addEventListener('click', () => {
+    getChart();
+  });
+
+  function fetchData(sensorId, startDate, endDate) {
+    const url = '/api/statistics/generate';
+    const data = { sensorId, startDate, endDate };
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(result => {
+        if (result.success) {
+          const processed = processData(result.data, new Date(startDate), new Date(endDate));
+          const movingAverage = calculateMovingAverage(processed.values, 5);
+          updateChart(processed.labels, processed.values, movingAverage);
+          updateStatistics(processed.values);
+        } else {
+          alert('Error fetching data.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while fetching data.');
+      })
+      .finally(() => {
+        // Hide loading overlay
+        document.getElementById('loadingOverlay').classList.add('d-none');
+      });
+  }
+
+  // Calculate moving average
+  function calculateMovingAverage(data, windowSize) {
+    let movingAverage = [];
+    for (let i = 0; i < data.length; i++) {
+      if (i < windowSize - 1) {
+        movingAverage.push(null); // Not enough data points to calculate
+      } else {
+        const window = data.slice(i - windowSize + 1, i + 1);
+        const sum = window.reduce((acc, val) => acc + val, 0);
+        movingAverage.push(sum / windowSize);
+      }
+    }
+    return movingAverage;
+  }
+
+  function processData(data, start, end) {
+    const measurements = data.map(item => ({
+      timestamp: new Date(item.timestamp),
+      value: item.value
+    })).sort((a, b) => a.timestamp - b.timestamp);
+    const diff = end - start;
+
+    let labels = [];
+    let values = [];
+    let bins = [];
+    let groupInterval;
+    let labelFormatter;
+
+    if (diff < 24 * 60 * 60 * 1000) {
+      const extractNumberRegex = /-?(\d+(\.\d+)?|\.\d+)/;
+
+      let rawValues = measurements.map(measurement => {
+        const match = measurement.value.match(extractNumberRegex);
+        return {
+          value: match ? parseFloat(match[0]) : null,
+          timestamp: measurement.timestamp,
+        };
+      }).filter(value => value !== null);
+
+      rawValues.forEach(m => {
+        labels.push(formatTime(m.timestamp));
+        values.push(m.value);
+      });
+      return {labels, values};
+    }
+
+    if (diff < 7 * 24 * 60 * 60 * 1000) {
+      groupInterval = 60 * 60 * 1000; // 1 hour in ms
+      labelFormatter = d => d.getHours();
+    } else if (diff < 30 * 24 * 60 * 60 * 1000) {
+      groupInterval = 24 * 60 * 60 * 1000; // 1 day in ms
+      labelFormatter = d => d.toLocaleString('en-US', { weekday: 'short' });
+    } else if (diff < 365 * 24 * 60 * 60 * 1000) {
+      groupInterval = 24 * 60 * 60 * 1000; // 1 day in ms
+      labelFormatter = d => d.getDate();
+    } else {
+      groupInterval = null;
+      labelFormatter = d => d.toLocaleString('en-US', { month: 'short' });
+    }
+
+    if (groupInterval) {
+      for (let t = start.getTime(); t <= end.getTime(); t += groupInterval) {
+        bins.push({
+          start: new Date(t),
+          end: new Date(t + groupInterval),
+          values: []
+        });
+      }
+    } else {
+      let current = new Date(start.getFullYear(), start.getMonth(), 1);
+      while (current <= end) {
+        let next = new Date(current.getFullYear(), current.getMonth() + 1, 1);
+        bins.push({
+          start: new Date(current),
+          end: new Date(next),
+          values: []
+        });
+        current = next;
+      }
+    }
+    const extractNumberRegex = /-?(\d+(\.\d+)?|\.\d+)/;
+
+    let rawValues = measurements.map(measurement => {
+      const match = measurement.value.match(extractNumberRegex);
+      return {
+        value: match ? parseFloat(match[0]) : null,
+        timestamp: measurement.timestamp,
+      };
+    }).filter(value => value !== null);
+
+    rawValues.forEach(m => {
+      for (let bin of bins) {
+        if (m.timestamp >= bin.start && m.timestamp < bin.end) {
+          bin.values.push(m.value);
+          break;
+        }
+      }
+    });
+
+    bins.forEach(bin => {
+      labels.push(labelFormatter(bin.start));
+      if (bin.values.length > 0) {
+        const sum = bin.values.reduce((a, b) => a + b, 0);
+        values.push(sum / bin.values.length);
+      } else {
+        values.push(null);
+      }
+    });
+
+    return { labels, values };
+  }
+
+  function formatTime(date) {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
+  function updateStatistics(values) {
+    // Filter out null values
+    const validValues = values.filter(val => val !== null);
+
+    if (validValues.length > 0) {
+      // Calculate statistics
+      const latest = validValues[validValues.length - 1];
+      const sum = validValues.reduce((a, b) => a + b, 0);
+      const avg = sum / validValues.length;
+      const min = Math.min(...validValues);
+      const max = Math.max(...validValues);
+
+      // Update the UI
+      document.getElementById('latestValue').textContent = latest.toFixed(2);
+      document.getElementById('averageValue').textContent = avg.toFixed(2);
+      document.getElementById('minValue').textContent = min.toFixed(2);
+      document.getElementById('maxValue').textContent = max.toFixed(2);
+    } else {
+      // Reset if no valid values
+      document.getElementById('latestValue').textContent = '--';
+      document.getElementById('averageValue').textContent = '--';
+      document.getElementById('minValue').textContent = '--';
+      document.getElementById('maxValue').textContent = '--';
+    }
+  }
+
+  function updateChart(labels, values, movingAverage) {
+    const ctx = document.getElementById('sensorChart').getContext('2d');
+
+    if (chart) {
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = values;
+      chart.data.datasets[1].data = movingAverage;
+      chart.update();
+    } else {
+      chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Sensor Measurement',
+              data: values,
+              fill: false,
+              borderColor: 'rgba(75, 192, 192, 1)',
+              backgroundColor: 'rgba(75, 192, 192, 0.05)',
+              borderWidth: 2,
+              pointRadius: 3,
+              tension: 0.1
+            },
+            {
+              label: 'Moving Average',
+              data: movingAverage,
+              fill: false,
+              borderColor: 'rgba(255, 99, 132, 1)',
+              borderDash: [5, 5],
+              pointRadius: 0,
+              tension: 0.1
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false
+            }
+          },
+          layout: {
+            padding: {
+              bottom: 20 // Add bottom padding to chart
+            }
+          },
+          scales: {
+            x: {
+              title: {
+                display: true,
+                text: 'Time'
+              },
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
+            },
+            y: {
+              title: {
+                display: true,
+                text: 'Measurement Value'
+              },
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              }
+            }
+          }
+        }
+      });
+    }
+  }
+</script>
