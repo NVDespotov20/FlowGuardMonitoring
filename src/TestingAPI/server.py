@@ -2,6 +2,7 @@ import json
 import random
 import pyodbc
 import re
+import platform
 from flask import Flask, jsonify
 from datetime import datetime
 
@@ -20,22 +21,37 @@ matches = re.findall(r'(\w+)=([^;]+)', connection_string)
 
 connection_params = {key.lower(): value for key, value in matches}
 
-connection_string = (
-    f'DRIVER={{ODBC Driver 18 for SQL Server}};'
-    f'SERVER={connection_params["server"]};'
-    f'DATABASE={connection_params["database"]};'
-    f'UID={connection_params["id"]};'
-    f'PWD={connection_params["password"]};'
-    f'TrustServerCertificate={connection_params["trustservercertificate"]}'
-)
+server = connection_params["server"]
+database = connection_params["database"]
 
-connection_string = connection_string.replace("TrustServerCertificate=True", "TrustServerCertificate=YES")
+is_windows = platform.system() == "Windows"
 
-odbc_driver = "{ODBC Driver 17 for SQL Server}"
+# Configure connection string based on OS
+if is_windows:
+    # Windows: Use Integrated Security
+    connection_string = (
+        f'DRIVER={{ODBC Driver 18 for SQL Server}};'
+        f'SERVER={server};'
+        f'DATABASE={database};'
+        f'Trusted_Connection=Yes;'
+        f'TrustServerCertificate=Yes;'
+    )
+else:
+    connection_string = (
+        f'DRIVER={{ODBC Driver 18 for SQL Server}};'
+        f'SERVER={connection_params["server"]};'
+        f'DATABASE={connection_params["database"]};'
+        f'UID={connection_params["id"]};'
+        f'PWD={connection_params["password"]};'
+        f'TrustServerCertificate={connection_params["trustservercertificate"]}'
+    )
+    connection_string = connection_string.replace("TrustServerCertificate=True", "TrustServerCertificate=YES")
+
+
+odbc_driver = "{ODBC Driver 18 for SQL Server}"
 if "DRIVER=" not in connection_string.upper():
     connection_string = f"DRIVER={odbc_driver};{connection_string}"
 conn = pyodbc.connect(connection_string)
-
 # ------------------------------------------------------------------------------
 # 3. Sensor Type Mapping
 # ------------------------------------------------------------------------------
