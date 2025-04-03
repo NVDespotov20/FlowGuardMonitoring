@@ -10,6 +10,9 @@ public class Measurement
     public DateTime Timestamp { get; set; }
     [MaxLength(50)]
     public string Value { get; set; } = string.Empty;
+
+    [Required]
+    public int RawValue { get; set; }
     public int SensorId { get; set; }
     public required Sensor Sensor { get; set; }
 }

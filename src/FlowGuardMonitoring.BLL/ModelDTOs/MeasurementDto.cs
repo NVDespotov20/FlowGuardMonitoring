@@ -8,4 +8,6 @@ public class MeasurementDto
     public DateTime TimeStamp { get; set; }
     [JsonPropertyName("value")]
     public string Value { get; set; } = string.Empty;
+    [JsonPropertyName("rawValue")]
+    public double RawValue { get; set; }
 }

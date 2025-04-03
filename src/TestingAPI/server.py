@@ -98,22 +98,27 @@ def generate_measurement(sensor):
     data = {
         "timeStamp": datetime.now().isoformat(),
         "value": None,
+        "rawValue": 0,
     }
 
     sensor_type = sensor.get("type")
 
     if sensor_type == "Ph":
-        data["value"] = str(round(random.uniform(5.5, 8.5), 2))
+        data["rawValue"] = round(random.uniform(5.5, 8.5), 2)
+        data["value"] = str(data["rawValue"])
 
     elif sensor_type == "Level":
         depth = sensor.get("location", {}).get("depth", 10)
-        data["value"] = str(round(random.uniform(0, depth), 2)) + "m"
+        data["rawValue"] = round(random.uniform(0, depth), 2)
+        data["value"] = str(data["rawValue"]) + "m"
 
     elif sensor_type == "Temperature":
-        data["value"] = str(round(random.uniform(-10, 40), 2)) + "°C"
+        data["rawValue"] = round(random.uniform(-10, 40), 2)
+        data["value"] = str(data["rawValue"]) + "°C"
 
     elif sensor_type == "Quality":
-        data["value"] = str(random.randint(0, 100)) + "%"
+        data["rawValue"] = random.randint(0, 100)
+        data["value"] = str(data["rawValue"]) + "%"
 
     elif sensor_type == "Contaminants":
         possible_contaminants = ["Lead", "Mercury", "Arsenic", "Nitrates", "Pesticides", "Cadmium"]

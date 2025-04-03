@@ -121,7 +121,7 @@ namespace FlowGuardMonitoring.DAL.Repositories;
         public async Task<List<Measurement>> GetChartElements(int sensorId, DateTime startDate, DateTime endDate)
         {
             var query = @"
-                    SELECT m.MeasurementId, m.Timestamp, m.Value, s.Type, s.SensorId
+                    SELECT m.MeasurementId, m.Timestamp, m.Value, s.Type, s.SensorId, m.RawValue
                     FROM Measurements m
                     INNER JOIN Sensors s ON m.SensorId = s.SensorId
                     WHERE m.SensorId = @p0
