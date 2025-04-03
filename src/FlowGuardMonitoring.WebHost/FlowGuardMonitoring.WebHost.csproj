@@ -62,10 +62,43 @@
       <_ContentIncludedByDefault Remove="Views\Shared\Management\_AddSensorModal.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Management\AddSensor.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Shared\Management\_AddSensor.cshtml" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\all.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\all.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\bootstrap.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\flatpickr.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\flatpickr.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\flowguard.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\flowguard.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\fonts.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\fonts.min.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\plugins.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\plugins.css.map" />
+      <_ContentIncludedByDefault Remove="wwwroot\css-old\plugins.min.css" />
     </ItemGroup>
 
     <ItemGroup>
       <AdditionalFiles Include="Views\Management\AddSensor.cshtml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Include="wwwroot\css\all.css" />
+      <None Include="wwwroot\css\all.min.css" />
+      <None Include="wwwroot\css\bootstrap-grid.min.css" />
+      <None Include="wwwroot\css\bootstrap-grid.rtl.min.css" />
+      <None Include="wwwroot\css\bootstrap-reboot.min.css" />
+      <None Include="wwwroot\css\bootstrap-reboot.rtl.min.css" />
+      <None Include="wwwroot\css\bootstrap-utilities.min.css" />
+      <None Include="wwwroot\css\bootstrap-utilities.rtl.min.css" />
+      <None Include="wwwroot\css\bootstrap.min.css" />
+      <None Include="wwwroot\css\bootstrap.rtl.min.css" />
+      <None Include="wwwroot\css\flatpickr.css" />
+      <None Include="wwwroot\css\flatpickr.min.css" />
+      <None Include="wwwroot\css\flowguard.css" />
+      <None Include="wwwroot\css\flowguard.min.css" />
+      <None Include="wwwroot\css\fonts.css" />
+      <None Include="wwwroot\css\fonts.min.css" />
+      <None Include="wwwroot\css\plugins.css" />
+      <None Include="wwwroot\css\plugins.min.css" />
     </ItemGroup>
 
 </Project>
