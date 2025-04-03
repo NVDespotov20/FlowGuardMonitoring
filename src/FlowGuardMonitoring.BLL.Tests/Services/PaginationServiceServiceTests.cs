@@ -41,7 +41,7 @@ public class PaginationServiceTests
 
         // Setup the repository mock.
         mockRepository
-            .Setup(repo => repo.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid"))
+            .Setup(repo => repo.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid", null))
             .ReturnsAsync(expectedRecords);
         mockRepository
             .Setup(repo => repo.GetCount("test-guid", searchValue))
@@ -76,7 +76,7 @@ public class PaginationServiceTests
         int totalRecords = 0;
 
         mockRepository
-            .Setup(repo => repo.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid"))
+            .Setup(repo => repo.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid", null))
             .ReturnsAsync(expectedRecords);
         mockRepository
             .Setup(repo => repo.GetCount("test-guid", searchValue))
@@ -86,7 +86,7 @@ public class PaginationServiceTests
 
         // Act
         PaginatedResult<DummyEntity> result = await service.GetPaginatedRecords(
-            pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid");
+            pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid", null);
 
         // Assert
         Assert.Equal(pageNumber, result.PageNumber);
@@ -114,7 +114,7 @@ public class PaginationServiceTests
         int totalRecords = 12;
 
         mockRepository
-            .Setup(repo => repo.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid"))
+            .Setup(repo => repo.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid", null))
             .ReturnsAsync(expectedRecords);
         mockRepository
             .Setup(repo => repo.GetCount("test-guid", searchValue))
@@ -125,7 +125,7 @@ public class PaginationServiceTests
         await service.GetPaginatedRecords(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid");
 
         mockRepository.Verify(
-            repo => repo.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid"),
+            repo => repo.GetPagedAsync(pageNumber, pageSize, sortColumn, sortDirection, searchValue, "test-guid", null),
             Times.Once);
         mockRepository.Verify(
             repo => repo.GetCount("test-guid", searchValue),

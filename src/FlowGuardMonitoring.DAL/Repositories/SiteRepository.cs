@@ -17,7 +17,8 @@ public class SiteRepository(FlowGuardMonitoringContext context) : IRepository<Si
         string sortColumn,
         string sortDirection,
         string searchValue,
-        string userId)
+        string userId,
+        int? id = null)
     {
         var query = context.Sites
             .Where(s => s.UserId == userId)

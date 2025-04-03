@@ -23,7 +23,14 @@ namespace FlowGuardMonitoring.DAL.Repositories
             return await this.context.Notifications.ToListAsync();
         }
 
-        public async Task<List<Notification>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue, string userId)
+        public async Task<List<Notification>> GetPagedAsync(
+            int pageNumber,
+            int pageSize,
+            string sortColumn,
+            string sortDirection,
+            string searchValue,
+            string userId,
+            int? id = null)
         {
             var query = this.context.Notifications.AsQueryable();
 

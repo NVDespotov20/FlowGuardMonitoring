@@ -123,7 +123,10 @@
 <script src="~/js/flowguard.js"></script>
 
 <partial name="_LogoutModal"/>
-
+@if ((bool)(ViewData["MeasurementsScript"] ?? false))
+{
+    <partial name="Measurements/_MeasurementsScript"/>
+}
 @if (ViewData["ScriptPath"] != null)
 {
 <partial name="../@ViewData["ScriptPath"]"/>

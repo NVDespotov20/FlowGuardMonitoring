@@ -11,5 +11,6 @@ public interface IPaginationService<T>
         string sortColumn,
         string sortDirection,
         string searchValue,
-        string userId);
+        string userId,
+        int? entityId = null);
 }

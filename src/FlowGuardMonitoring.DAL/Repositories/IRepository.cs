@@ -7,7 +7,14 @@ public interface IRepository<T>
     where T : class
 {
     Task<List<T>> GetAllAsync();
-    Task<List<T>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue, string userId);
+    Task<List<T>> GetPagedAsync(
+        int pageNumber,
+        int pageSize,
+        string sortColumn,
+        string sortDirection,
+        string searchValue,
+        string userId,
+        int? id = null);
     Task<T?> GetByIdAsync(int id);
     Task AddAsync(T entity);
     Task UpdateAsync(T entity);

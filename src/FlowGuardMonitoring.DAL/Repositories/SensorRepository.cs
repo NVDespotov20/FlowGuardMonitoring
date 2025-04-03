@@ -11,7 +11,14 @@ public class SensorRepository(FlowGuardMonitoringContext context) : IRepository<
         return await context.Sensors.Include(s => s.Site).ToListAsync();
     }
 
-    public async Task<List<Sensor>> GetPagedAsync(int pageNumber, int pageSize, string sortColumn, string sortDirection, string searchValue, string userId)
+    public async Task<List<Sensor>> GetPagedAsync(
+        int pageNumber,
+        int pageSize,
+        string sortColumn,
+        string sortDirection,
+        string searchValue,
+        string userId,
+        int? id = null)
     {
         // Start with the base query
         var query = context.Sensors

@@ -1,0 +1,91 @@
+@model FlowGuardMonitoring.BLL.Models.PaginatedResult<FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel>
+
+@{
+    bool showSensorName = ViewBag.ShowSensorName == null || (bool)ViewBag.ShowSensorName;
+    bool showTimestamp = ViewBag.ShowTimestamp == null || (bool)ViewBag.ShowTimestamp;
+    bool showType = ViewBag.ShowType == null || (bool)ViewBag.ShowType;
+    bool showValue = ViewBag.ShowValue == null || (bool)ViewBag.ShowValue;
+
+    var visibleColumns = new List<string>();
+    if (showSensorName) { visibleColumns.Add("sensorName"); }
+    if (showTimestamp) { visibleColumns.Add("timestamp"); }
+    if (showType) { visibleColumns.Add("type"); }
+    if (showValue) { visibleColumns.Add("value"); }
+}
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Measurements</h4>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="table" class="display table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            @if (showSensorName)
+                            {
+                                <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.SensorName)</th>
+                            }
+                            @if (showTimestamp)
+                            {
+                                <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Timestamp)</th>
+                            }
+                            @if (showType)
+                            {
+                                <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Type)</th>
+                            }
+                            @if (showValue)
+                            {
+                                <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Value)</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            @if (showSensorName)
+                            {
+                                <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.SensorName)</th>
+                            }
+                            @if (showTimestamp)
+                            {
+                                <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Timestamp)</th>
+                            }
+                            @if (showType)
+                            {
+                                <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Type)</th>
+                            }
+                            @if (showValue)
+                            {
+                                <th>@nameof(FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel.Value)</th>
+                            }
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var measurement in Model.Records)
+                        {
+                            <tr>
+                                @if (showSensorName)
+                                {
+                                    <td>@measurement.SensorName</td>
+                                }
+                                @if (showTimestamp)
+                                {
+                                    <td>@measurement.Timestamp</td>
+                                }
+                                @if (showType)
+                                {
+                                    <td>@measurement.Type</td>
+                                }
+                                @if (showValue)
+                                {
+                                    <td>@measurement.Value</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -22,11 +22,12 @@ namespace FlowGuardMonitoring.DAL.Repositories;
             string sortColumn,
             string sortDirection,
             string searchValue,
-            string userId)
+            string userId,
+            int? sensorId = null)
         {
             var query = context.Measurements
                 .Include(m => m.Sensor)
-                .Where(m => m.Sensor.Site.UserId == userId)
+                .Where(m => m.Sensor.Site.UserId == userId && (sensorId == null || m.Sensor.SensorId == sensorId))
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchValue))

@@ -1,8 +1,10 @@
 @{
     ViewData["Title"] = "Measurements";
     Layout = "_Layout";
+    ViewData["MeasurementsScript"] = true;
     ViewData["ScriptPath"] = "/Statistics/Partials/SensorStatisticsScript";
 }
+@model FlowGuardMonitoring.BLL.Models.PaginatedResult<FlowGuardMonitoring.WebHost.Models.Tables.MeasurementViewModel>
 
 <style>
     .chart-container {
@@ -113,6 +115,14 @@
                     </div>
                 </div>
             </div>
+            @{
+                ViewBag.ShowSensorName = false;
+                ViewBag.ShowTimestamp = true;
+                ViewBag.ShowType = false;
+                ViewBag.ShowValue = true;
+                ViewBag.PostUrl = $"/statistics/{ViewBag.SensorId}/measurements";
+            }
+            @await Html.PartialAsync("Measurements/_Measurements", Model)
         </div>
     </div>
 </div>

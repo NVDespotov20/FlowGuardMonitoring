@@ -1,0 +1,61 @@
+@{
+    bool showSensorName = ViewBag.ShowSensorName == null || (bool)ViewBag.ShowSensorName;
+    bool showTimestamp = ViewBag.ShowTimestamp == null || (bool)ViewBag.ShowTimestamp;
+    bool showType = ViewBag.ShowType == null || (bool)ViewBag.ShowType;
+    bool showValue = ViewBag.ShowValue == null || (bool)ViewBag.ShowValue;
+    string postUrl = ViewBag.PostUrl == null ? "/Tables/GetMeasurements" : (string)ViewBag.PostUrl;
+}
+
+<script>
+    $(document).ready(function () {
+        let columns = [];
+        @if (showSensorName)
+        {
+            @:columns.push({ "data": "sensorName" });
+        }
+        @if (showTimestamp)
+        {
+            @:columns.push({ "data": "timestamp" });
+        }
+        @if (showType)
+        {
+            @:columns.push({ "data": "type" });
+        }
+        @if (showValue)
+        {
+            @:columns.push({ "data": "value" });
+        }
+
+        // Determine the index of the "timestamp" column (if visible) for default sorting.
+        var timestampIndex = columns.findIndex(function(c) { return c.data === "timestamp"; });
+        if (timestampIndex === -1) {
+            // fallback to first column if timestamp isn't visible
+            timestampIndex = 0;
+        }
+
+        $("#table").DataTable({
+            "processing": true,
+            "serverSide": true,
+            "filter": true,
+            "orderMulti": false,
+            "order": [ [ timestampIndex, 'desc' ] ],
+            "ajax": {
+                "url": "@postUrl",
+                "type": "POST",
+                "dataType": "json",
+                "contentType": "application/json",
+                "data": function (d) {
+                    return JSON.stringify({
+                        draw: d.draw,
+                        start: d.start,
+                        length: d.length,
+                        sortColumn: d.columns[d.order[0].column].data,
+                        sortDirection: d.order[0].dir,
+                        searchValue: d.search.value
+                    });
+                }
+            },
+            "columns": columns,
+        });
+    });
+</script>
