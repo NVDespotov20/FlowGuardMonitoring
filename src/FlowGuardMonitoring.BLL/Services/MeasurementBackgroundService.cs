@@ -212,6 +212,7 @@ public class MeasurementBackgroundService : BackgroundService
         {
             Timestamp = dto.TimeStamp,
             Value = dto.Value,
+            RawValue = dto.RawValue,
             SensorId = sensorId,
             Sensor = null!,
         };

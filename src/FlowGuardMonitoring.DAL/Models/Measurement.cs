@@ -12,7 +12,7 @@ public class Measurement
     public string Value { get; set; } = string.Empty;
 
     [Required]
-    public int RawValue { get; set; }
+    public double RawValue { get; set; }
     public int SensorId { get; set; }
     public required Sensor Sensor { get; set; }
 }
