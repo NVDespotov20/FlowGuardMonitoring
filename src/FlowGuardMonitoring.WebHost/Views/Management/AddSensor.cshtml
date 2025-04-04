@@ -1,8 +1,13 @@
 @using FlowGuardMonitoring.DAL.Models
-@model FlowGuardMonitoring.WebHost.Models.Management.AddSensorViewModel
+@using FlowGuardMonitoring.WebHost.Models.Management
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model FlowGuardMonitoring.WebHost.Models.Tables.SensorViewModel
 @{
-    var sites = new List<SelectListItem>();
-    sites.AddRange(collection: ViewBag.Sites as List<SelectListItem> ?? new List<SelectListItem>());
+    ViewData["ScriptPath"] = "/Management/Partials/AddSensorScript";
+    
+    var sites = new List<SiteSelectListItem>();
+    sites.AddRange(ViewBag.Sites as List<SiteSelectListItem> ?? new List<SiteSelectListItem>());
+
     var sensorTypes = Enum.GetValues(typeof(SensorType))
         .Cast<SensorType>()
         .Where(t => t != SensorType.Unknown)
@@ -12,56 +17,137 @@
             Text = t.ToString()
         })
         .ToList();
+
+    if (Model.InstallationDate == default)
+    {
+        Model.InstallationDate = DateTime.Today;
+    }
+
+    if (!Model.IsActive)
+    {
+        Model.IsActive = true;
+    }
 }
 
-<div>
-    <div class="page-header">
-        <h3 class="fw-bold mb-3">Create Sensor</h3>
-    </div>
+<div class="container py-4">
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Sensor Details</div>
+        <div class="col-lg-12">
+            <!-- Page Header -->
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h2 class="h3 mb-0 text-gray-800">Create Sensor</h2>
+                <a href="@Url.Action("Sensors", "Tables")" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm">
+                    <i class="fas fa-arrow-left fa-sm text-white-50 me-1"></i> Back to List
+                </a>
+            </div>
+
+            <!-- Main Card -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Sensor Details</h6>
                 </div>
                 <div class="card-body">
-                    <form asp-action="AddSensor" asp-controller="Management", method="post" class="form-horizontal" id="AddSensorForm">
+                    <form asp-action="AddSensor" asp-controller="Management" method="post" id="AddSensorForm">
                         @Html.AntiForgeryToken()
 
-                        <!-- Sensor Fields -->
-                        <div class="form-group form-group-default">
-                            <label>Name</label>
-                            @Html.TextBoxFor(m => m.Sensor.Name, new { @class = "form-control", placeholder = "Sensor Name" })
-                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Sensor.Name)</div>
+                        <div class="row g-3">
+                            <!-- Left Column -->
+                            <div class="col-md-6">
+                                <!-- Name -->
+                                <div class="mb-3">
+                                    <label for="Name" class="form-label">Name <span class="text-danger">*</span></label>
+                                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter sensor name" })
+                                    <div class="form-text text-danger">@Html.ValidationMessageFor(m => m.Name)</div>
+                                </div>
+
+                                <!-- Sensor Type -->
+                                <div class="mb-3">
+                                    <label for="Type" class="form-label">Sensor Type <span class="text-danger">*</span></label>
+                                    @Html.DropDownListFor(model => model.Type, sensorTypes, new { @class = "form-select" })
+                                    <div class="form-text text-danger">@Html.ValidationMessageFor(model => model.Type)</div>
+                                </div>
+
+                                <!-- Site Dropdown -->
+                                <div class="mb-3">
+                                    <label for="SiteName" class="form-label">Location <span class="text-danger">*</span></label>
+                                    @Html.DropDownListFor(m => m.SiteName, sites, new { @class = "form-select", id = "siteDropdown" })
+                                    <div class="form-text text-danger">@Html.ValidationMessageFor(m => m.SiteName)</div>
+                                </div>
+
+                                <!-- Installation Date with Flatpickr -->
+                                <div class="mb-3">
+                                    <label for="InstallationDate" class="form-label">Installation Date</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                        @Html.TextBoxFor(m => m.InstallationDate,
+                                            "{0:yyyy-MM-dd}",
+                                            new { @class = "form-control flatpickr-date", placeholder = "Select date" })
+                                    </div>
+                                    <div class="form-text text-danger">@Html.ValidationMessageFor(m => m.InstallationDate)</div>
+                                </div>
+
+                                <!-- Status -->
+                                <div class="mb-3">
+                                    <div class="form-check form-switch">
+                                        @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input" })
+                                        <label class="form-check-label" for="IsActive">Active</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Column -->
+                            <div class="col-md-6">
+                                <!-- Serial Number -->
+                                <div class="mb-3">
+                                    <label for="SerialNumber" class="form-label">Serial Number</label>
+                                    @Html.TextBoxFor(m => m.SerialNumber, new { @class = "form-control", placeholder = "e.g. SN-00123" })
+                                    <div class="form-text text-danger">@Html.ValidationMessageFor(m => m.SerialNumber)</div>
+                                </div>
+
+                                <!-- Manufacturer -->
+                                <div class="mb-3">
+                                    <label for="Manufacturer" class="form-label">Manufacturer</label>
+                                    @Html.TextBoxFor(m => m.Manufacturer, new { @class = "form-control", placeholder = "e.g. Acme Corp." })
+                                    <div class="form-text text-danger">@Html.ValidationMessageFor(m => m.Manufacturer)</div>
+                                </div>
+
+                                <!-- Model Number -->
+                                <div class="mb-3">
+                                    <label for="ModelNumber" class="form-label">Model Number</label>
+                                    @Html.TextBoxFor(m => m.ModelNumber, new { @class = "form-control", placeholder = "e.g. WTR-2024" })
+                                    <div class="form-text text-danger">@Html.ValidationMessageFor(m => m.ModelNumber)</div>
+                                </div>
+
+                                <!-- Coordinates Group -->
+                                <div class="mb-3">
+                                    <label class="form-label">Coordinates (Optional)</label>
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                                @Html.TextBoxFor(m => m.Latitude, new { @class = "form-control", placeholder = "Latitude" })
+                                            </div>
+                                            <div class="form-text text-danger">@Html.ValidationMessageFor(m => m.Latitude)</div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                                @Html.TextBoxFor(m => m.Longitude, new { @class = "form-control", placeholder = "Longitude" })
+                                            </div>
+                                            <div class="form-text text-danger">@Html.ValidationMessageFor(m => m.Longitude)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group form-group-default">
-                            <label>Sensor Type</label>
-                            @Html.DropDownListFor(model => model.Sensor.Type, sensorTypes, new { @class = "form-select" })
-                            <div class="text-danger">@Html.ValidationMessageFor(model => model.Sensor.Type)</div>
-                        </div>
-
-                        <div class="form-group form-group-default">
-                            <label>Installation Date</label>
-                            @Html.TextBoxFor(m => m.Sensor.InstallationDate,
-                                $"{DateTime.Now:dd/MM/yyyy}",
-                                new { @class = "form-control", type = "date" })
-                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Sensor.InstallationDate)</div>
-                        </div>
-
-                        <div class="form-group form-group-default">
-                            <label>Active</label>
-                            @Html.CheckBoxFor(m => m.Sensor.IsActive, new { @class = "form-check-input" })
-                        </div>
-
-                        <div class="form-group form-group-default">
-                            <label>Location</label>
-                            @Html.DropDownListFor(m => m.Sensor.SiteName, sites, new { @class = "form-select", id = "siteDropdown" })
-                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Sensor.SiteName)</div>
-                        </div>
-                        <div class="card-action">
-                            <button type="submit" class="btn btn-success">Submit</button>
-                            <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Sensors", "Tables")'">Cancel</button>
+                        <!-- Buttons -->
+                        <div class="mt-4 d-flex justify-content-end">
+                            <a href="@Url.Action("Sensors", "Tables")" class="btn btn-outline-secondary me-2">
+                                <i class="fas fa-times me-1"></i> Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i> Save Sensor
+                            </button>
                         </div>
                     </form>
                 </div>

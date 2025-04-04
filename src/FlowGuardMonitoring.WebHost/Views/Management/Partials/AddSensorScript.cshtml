@@ -1,0 +1,38 @@
+@using FlowGuardMonitoring.WebHost.Models.Management
+<script>
+    $(document).ready(function() {
+        // Initialize Flatpickr
+        $(".flatpickr-date").flatpickr({
+            dateFormat: "Y-m-d",
+            defaultDate: "@Model.InstallationDate.ToString("yyyy-MM-dd")",
+            allowInput: true
+        });
+
+        // Store site coordinates in JavaScript
+        var siteCoordinates = [
+            @foreach (var site in ViewBag.Sites as List<SiteSelectListItem> ?? new List<SiteSelectListItem>())
+            {
+                @:{ value: "@site.Value", latitude: @site.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture), longitude: @site.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture) },
+            }
+        ];
+
+        // Function to update coordinates based on selected site
+        function updateCoordinates() {
+            var selectedSiteValue = $("#siteDropdown").val();
+            var selectedSite = siteCoordinates.find(function(site) {
+                return site.value === selectedSiteValue;
+            });
+
+            if (selectedSite) {
+                $("#Latitude").val(selectedSite.latitude);
+                $("#Longitude").val(selectedSite.longitude);
+            }
+        }
+
+        // Update coordinates when page loads
+        updateCoordinates();
+
+        // Update coordinates when site selection changes
+        $("#siteDropdown").change(updateCoordinates);
+    });
+</script>

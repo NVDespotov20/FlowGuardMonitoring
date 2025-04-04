@@ -1,0 +1,134 @@
+@using System.Globalization
+@model FlowGuardMonitoring.WebHost.Models.Tables.SiteViewModel
+
+<script>
+    $(document).ready(function() {
+        // Initialize the map
+        var map = L.map('map').setView([0, 0], 2);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Add geocoder control
+        var geocoder = L.Control.geocoder({
+            defaultMarkGeocode: false,
+            position: 'topleft',
+            placeholder: 'Search for a location...'
+        }).addTo(map);
+
+        // Initialize marker
+        var marker;
+
+        // Check if we have initial coordinates
+        var initialLat = @(Model != null && Model?.Latitude != 0 ? Model?.Latitude.ToString(CultureInfo.InvariantCulture) : "null");
+        var initialLng = @(Model != null && Model?.Longitude != 0 ? Model?.Longitude.ToString(CultureInfo.InvariantCulture) : "null");
+
+        if (initialLat && initialLng) {
+            // Set initial marker and center map
+            marker = L.marker([initialLat, initialLng], { draggable: true }).addTo(map);
+            map.setView([initialLat, initialLng], 15);
+
+            // Set form values
+            $('#latitude').val(initialLat);
+            $('#longitude').val(initialLng);
+
+            // Add listener for drag end
+            marker.on('dragend', function(event) {
+                updateCoordinates(marker.getLatLng());
+            });
+        }
+
+        // Function to handle location selection
+        function selectLocation(latlng) {
+            // If marker exists, update its position, otherwise create a new one
+            if (marker) {
+                marker.setLatLng(latlng);
+            } else {
+                marker = L.marker(latlng, { draggable: true }).addTo(map);
+
+                // Add listener for drag end
+                marker.on('dragend', function(event) {
+                    updateCoordinates(marker.getLatLng());
+                });
+            }
+
+            // Update form fields with coordinates
+            updateCoordinates(latlng);
+
+            // Center map on selected location
+            map.setView(latlng, 15);
+        }
+
+        // Update form fields with coordinates
+        function updateCoordinates(latlng) {
+            $('#latitude').val(latlng.lat.toFixed(6));
+            $('#longitude').val(latlng.lng.toFixed(6));
+        }
+
+        // Handle map click events
+        map.on('click', function(e) {
+            selectLocation(e.latlng);
+        });
+
+        // Handle geocoder results
+        geocoder.on('markgeocode', function(e) {
+            var latlng = e.geocode.center;
+            selectLocation(latlng);
+        });
+
+        // Handle search button click
+        $('#searchButton').on('click', function() {
+            var searchText = $('#searchInput').val();
+            if (searchText.trim() !== '') {
+                // Use the geocoder to search
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchText)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.length > 0) {
+                            var result = data[0];
+                            var latlng = L.latLng(result.lat, result.lon);
+                            selectLocation(latlng);
+                        } else {
+                            alert('Location not found. Please try a different search term.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error searching for location:', error);
+                        alert('Error searching for location. Please try again.');
+                    });
+            }
+        });
+
+        // Handle search input enter key
+        $('#searchInput').on('keypress', function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                $('#searchButton').click();
+            }
+        });
+
+        // Reset map button
+        $('#resetMapButton').on('click', function() {
+            if (marker) {
+                map.removeLayer(marker);
+                marker = null;
+            }
+            $('#latitude').val('');
+            $('#longitude').val('');
+            map.setView([0, 0], 2);
+        });
+
+        // Use geolocation to set initial map view if no coordinates provided
+        if (!initialLat || !initialLng) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    map.setView([position.coords.latitude, position.coords.longitude], 13);
+                }, function() {
+                    // If geolocation fails, keep default view
+                });
+            }
+        }
+    });
+</script>

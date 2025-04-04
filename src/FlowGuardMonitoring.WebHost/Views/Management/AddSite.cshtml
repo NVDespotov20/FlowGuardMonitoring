@@ -1,51 +1,138 @@
-@using FlowGuardMonitoring.WebHost.Models.Management
+@using System.Globalization
 @model FlowGuardMonitoring.WebHost.Models.Tables.SiteViewModel
+@{
+    ViewData["ScriptPath"] = "/Management/Partials/AddSiteScript";
+    ViewData["ScriptModel"] = Model;
+}
 
-<div>
-    <div class="page-header">
-        <h3 class="fw-bold mb-3">Add New Location</h3>
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h3 class="fw-bold text-primary">Add New Location</h3>
+            <hr class="mt-2 mb-4">
+        </div>
     </div>
+
     <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-title">Location Details</div>
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light py-3">
+                    <h5 class="card-title mb-0">Location Details</h5>
                 </div>
-                <div class="card-body">
-                    <form asp-action="AddSite" asp-controller="Management" method="post" class="form-horizontal" id="CreateSiteForm">
+                <div class="card-body p-4">
+                    <form asp-action="AddSite" asp-controller="Management" method="post" id="CreateSiteForm">
                         @Html.AntiForgeryToken()
 
-                        <div class="form-group form-group-default">
-                            <label>Location Name</label>
-                            @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "New Site Name" })
-                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Name)</div>
+                        <div class="mb-4">
+                            <label asp-for="Name" class="form-label fw-semibold">Location Name</label>
+                            <input asp-for="Name" class="form-control form-control-lg" placeholder="Enter location name" />
+                            <span asp-validation-for="Name" class="text-danger small"></span>
                         </div>
 
-                        <div class="form-group form-group-default">
-                            <label>Description</label>
-                            @Html.TextAreaFor(m => m.Description, new { @class = "form-control", rows = 5, placeholder = "Site Description" })
-                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Description)</div>
+                        <div class="mb-4">
+                            <label asp-for="Description" class="form-label fw-semibold">Description</label>
+                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Provide a detailed description of this location"></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
                         </div>
 
-                        <div class="form-group form-group-default">
-                            <label>Latitude</label>
-                            @Html.TextBoxFor(m => m.Latitude, new { @class = "form-control", placeholder = "Latitude" })
-                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Latitude)</div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">Location on Map</label>
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div id="map" style="height: 400px; width: 100%; border-radius: 0.25rem;"></div>
+                                </div>
+                                <div class="card-footer bg-light py-2 px-3">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-auto small text-muted">
+                                            <i class="bi bi-info-circle me-1"></i> Click on the map to set the location or search for an address
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="resetMapButton">
+                                            <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="form-group form-group-default">
-                            <label>Longitude</label>
-                            @Html.TextBoxFor(m => m.Longitude, new { @class = "form-control", placeholder = "Longitude" })
-                            <div class="text-danger">@Html.ValidationMessageFor(m => m.Longitude)</div>
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Search Address</label>
+                                    <div class="input-group">
+                                        <input type="text" id="searchInput" class="form-control" placeholder="Enter address to search">
+                                        <button class="btn btn-outline-secondary" type="button" id="searchButton">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label asp-for="Latitude" class="form-label">Latitude</label>
+                                        <input asp-for="Latitude" id="latitude" class="form-control" readonly />
+                                        <span asp-validation-for="Latitude" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Longitude" class="form-label">Longitude</label>
+                                        <input asp-for="Longitude" id="longitude" class="form-control" readonly />
+                                        <span asp-validation-for="Longitude" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="card-action">
-                            <button type="submit" class="btn btn-success">Add</button>
-                            <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Sites", "Tables")'">Cancel</button>
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+                            <a href="@Url.Action("Sites", "Tables")" class="btn btn-outline-secondary px-4">
+                                Cancel
+                            </a>
+                            <button type="submit" class="btn btn-primary px-4">
+                                Add Location
+                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow-sm border-0 bg-light h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title mb-3">Location Information</h5>
+                    <p class="text-muted">
+                        Add a new monitoring location to the FlowGuard system. You can select the exact location by:
+                    </p>
+                    <ul class="text-muted mb-4">
+                        <li>Clicking directly on the map</li>
+                        <li>Searching for an address or landmark</li>
+                        <li>Dragging the marker to fine-tune the position</li>
+                    </ul>
+                    <hr>
+                    <p class="small text-muted mb-0">
+                        <i class="bi bi-info-circle me-2"></i> All fields are required for successful registration.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+<!-- Leaflet CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""/>
+<!-- Leaflet Geocoder CSS -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<style>
+    .leaflet-control-geocoder {
+        width: 100%;
+        max-width: 400px;
+    }
+</style>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+<!-- Leaflet Geocoder -->
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>

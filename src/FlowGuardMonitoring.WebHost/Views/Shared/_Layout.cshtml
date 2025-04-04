@@ -129,7 +129,14 @@
 }
 @if (ViewData["ScriptPath"] != null)
 {
-<partial name="../@ViewData["ScriptPath"]"/>
+    if (ViewData["ScriptModel"] != null)
+    {
+        <partial name="../@ViewData["ScriptPath"]" model="@ViewData["ScriptModel"]"/>
+    }
+    else
+    {
+        <partial name="../@ViewData["ScriptPath"]"/>
+    }
 }
 </body>
 </html>

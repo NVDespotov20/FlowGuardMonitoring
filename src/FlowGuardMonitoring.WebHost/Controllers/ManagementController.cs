@@ -34,12 +34,12 @@ public class ManagementController : Controller
     public async Task<IActionResult> AddSensor()
     {
         await this.PopulateSites();
-        return this.View(new AddSensorViewModel());
+        return this.View(new SensorViewModel());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> AddSensor(AddSensorViewModel model)
+    public async Task<IActionResult> AddSensor(SensorViewModel model)
     {
         if (!this.ModelState.IsValid)
         {
@@ -47,7 +47,7 @@ public class ManagementController : Controller
             return this.View(model);
         }
 
-        if (!int.TryParse(model.Sensor.SiteName, out int siteId))
+        if (!int.TryParse(model.SiteName, out int siteId))
         {
             this.ModelState.AddModelError("Sensor.SiteName", "Please select a valid location.");
             await this.PopulateSites();
@@ -56,13 +56,19 @@ public class ManagementController : Controller
 
         var sensor = new Sensor
         {
-            Name = model.Sensor.Name,
-            Type = model.Sensor.Type,
-            InstallationDate = model.Sensor.InstallationDate,
-            IsActive = model.Sensor.IsActive,
+            Name = model.Name,
+            Type = model.Type,
+            InstallationDate = model.InstallationDate,
+            IsActive = model.IsActive,
+            SerialNumber = model.SerialNumber,
+            Manufacturer = model.Manufacturer,
+            ModelNumber = model.ModelNumber,
+            Latitude = model.Latitude,
+            Longitude = model.Longitude,
             SiteId = siteId,
             Site = (await this.siteRepository.GetByIdAsync(siteId))!,
         };
+
         await this.sensorRepository.AddAsync(sensor);
         return this.RedirectToAction("Sensors", "Tables");
     }
@@ -70,7 +76,7 @@ public class ManagementController : Controller
     [HttpGet]
     public IActionResult AddSite()
     {
-        return this.View();
+        return this.View(new SiteViewModel());
     }
 
     [HttpPost]
@@ -97,15 +103,23 @@ public class ManagementController : Controller
 
     private async Task PopulateSites()
     {
-        var sites = new List<SelectListItem>
+        var sites = new List<SiteSelectListItem>
         {
-            new() { Value = string.Empty, Text = "-- Select Site --" },
+            new()
+            {
+                Value = string.Empty,
+                Text = "-- Select Site --",
+                Latitude = 0,
+                Longitude = 0,
+            },
         };
 
-        var existingSites = (await this.siteRepository.GetAllAsync()).Select(s => new SelectListItem
+        var existingSites = (await this.siteRepository.GetAllAsync()).Select(s => new SiteSelectListItem
         {
             Value = s.SiteId.ToString(),
             Text = s.Name,
+            Latitude = s.Latitude,
+            Longitude = s.Longitude,
         }).ToList();
         sites.AddRange(existingSites);
 
