@@ -34,7 +34,7 @@
         <div class="col-12">
             <div class="card shadow-sm">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Sensor Data Chart</h4>
+                    <h4 class="mb-0">@(ViewBag.SensorName == string.Empty ? "Sensor" : ViewBag.SensorName) Data Chart</h4>
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-outline-secondary" id="timeRangeDay">Day</button>
                         <button type="button" class="btn btn-outline-secondary" id="timeRangeWeek">Week</button>

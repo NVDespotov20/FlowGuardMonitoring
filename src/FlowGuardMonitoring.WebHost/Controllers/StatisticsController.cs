@@ -50,9 +50,10 @@ public class StatisticsController : Controller
     }
 
     [HttpGet("/statistics/{sensorId?}")]
-    public IActionResult SensorStatistics(int sensorId)
+    public async Task<IActionResult> SensorStatistics(int sensorId)
     {
         this.ViewBag.SensorId = sensorId;
+        this.ViewBag.SensorName = (await this.sensorRepository.GetByIdAsync(sensorId))?.Name ?? string.Empty;
         return this.View(new PaginatedResult<MeasurementViewModel>());
     }
 
