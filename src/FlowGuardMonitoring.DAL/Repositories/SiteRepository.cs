@@ -63,6 +63,11 @@ public class SiteRepository(FlowGuardMonitoringContext context) : IRepository<Si
         return await context.Sites.FindAsync(id);
     }
 
+    public async Task<List<Site>> GetByUserId(string userId)
+    {
+        return await context.Sites.Where(s => s.UserId == userId).ToListAsync();
+    }
+
     public async Task AddAsync(Site site)
     {
         await context.Sites.AddAsync(site);

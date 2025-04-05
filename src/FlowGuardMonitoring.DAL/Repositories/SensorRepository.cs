@@ -73,6 +73,11 @@ public class SensorRepository(FlowGuardMonitoringContext context) : IRepository<
             .FirstOrDefaultAsync(s => s.SensorId == id);
     }
 
+    public async Task<List<Sensor>> GetBySiteIdAsync(int siteId)
+    {
+        return await context.Sensors.Where(s => s.SiteId == siteId).ToListAsync();
+    }
+
     public async Task AddAsync(Sensor sensor)
     {
         await context.Sensors.AddAsync(sensor);

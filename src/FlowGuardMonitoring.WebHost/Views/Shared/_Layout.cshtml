@@ -38,6 +38,17 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/plugins.min.css" />
     <link rel="stylesheet" href="~/css/flowguard.min.css" />
+    @if (ViewData["Map"] != null)
+    {
+    <!-- Leaflet CSS -->
+    <link 
+        rel="stylesheet" 
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""
+    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    }
 
 </head>
 <body>
@@ -76,8 +87,6 @@
                 @RenderBody()
             </div>
         </div>
-
-        <partial name="_Footer"/>
     </div>
 </div>
 <!--   Core JS Files   -->
@@ -118,6 +127,16 @@
 <!-- Sweet Alert -->
 <script src="~/js/plugin/sweetalert/sweetalert.min.js"></script>
 <script type="text/javascript" src="~/js/plugin/default-passive-events/dist/index.js"></script>
+
+@if (ViewData["Map"] != null)
+{
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+></script>
+<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+}
 
 <!-- FlowGuard JS -->
 <script src="~/js/flowguard.js"></script>

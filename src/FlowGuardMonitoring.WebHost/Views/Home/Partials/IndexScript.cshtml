@@ -1,59 +1,143 @@
-﻿<script>
-    var sensorId = 0;
-    var year = 2025;
+﻿@model FlowGuardMonitoring.WebHost.Models.Home.IndexViewModel
+<script>
+    $(document).ready(function () {
+        var map = L.map('mapContainer').setView([0, 0], 2);
 
-    // Fetch data from the API
-    fetch(`/api/SensorData/yearly?sensorId=${sensorId}&year=${year}`)
-        .then(response => response.json())
-        .then(data => {
-            // Process data for the chart
-            var chartData = data.map(d => ({
-                day: d.Day,         // Date in 'yyyy-MM-dd' format
-                average: d.Average  // Average value (null if no data)
-            }));
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
-            // Generate the chart using AG Charts
-            agCharts.AgChart.create({
-                container: document.getElementById('chart-container'),
-                data: chartData,
-                series: [{
-                    type: 'line',
-                    xKey: 'day',
-                    yKey: 'average',
-                    yName: 'Average Measurement',
-                    stroke: '#47a9ff',
-                    strokeWidth: 2,
-                    marker: {
-                        size: 5,
-                        fill: '#47a9ff',
-                        stroke: '#47a9ff'
-                    },
-                    tooltip: {
-                        renderer: function(params) {
-                            if (params.yValue === null) {
-                                return 'No data available for this day';
-                            } else {
-                                return 'Average: ' + params.yValue.toFixed(2);
-                            }
-                        }
-                    }
-                }],
-                axes: [
-                    {
-                        type: 'time',
-                        position: 'bottom',
-                        title: { text: 'Day of the Year' }
-                    },
-                    {
-                        type: 'number',
-                        position: 'left',
-                        title: { text: 'Average Value' }
-                    }
-                ],
-                legend: {
-                    enabled: false
+        var locations = @Html.Raw(Json.Serialize(Model.Locations));
+
+        var locationLayer = L.layerGroup().addTo(map);
+        var sensorLayer = L.layerGroup();
+
+        var ZOOM_THRESHOLD = 12;
+
+        var sensorCache = {};
+
+        var locationById = {};
+        var locationMarkers = {};
+
+        if (locations.length > 0) {
+            var bounds = [];
+            $.each(locations, function (i, location) {
+                bounds.push([location.latitude, location.longitude]);
+                locationById[location.siteId] = location;
+            });
+            map.fitBounds(bounds);
+        }
+
+        var normalLocationIcon = L.Icon.Default;
+        var subtleLocationIcon = L.divIcon({
+            className: 'subtle-location-marker',
+            html: '<div style="background-color: rgba(0, 0, 0, 0.5); width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.7);"></div>',
+            iconSize: [20, 20],
+            iconAnchor: [10, 10]
+        });
+
+        function addLocationMarkers() {
+            $.each(locations, function (i, location) {
+                var marker = L.marker([location.latitude, location.longitude])
+                    .bindPopup('<strong>' + location.name + '</strong>');
+
+                marker.on('click', function () {
+                    map.setView([location.latitude, location.longitude], ZOOM_THRESHOLD + 1);
+                });
+
+                locationLayer.addLayer(marker);
+                locationMarkers[location.siteId] = marker;
+            });
+        }
+
+        addLocationMarkers();
+
+        function showSensorsInView() {
+            var bounds = map.getBounds();
+
+            var locationsInView = $.grep(locations, function (location) {
+                return bounds.contains([location.latitude, location.longitude]);
+            });
+
+            $.each(locationsInView, function (i, location) {
+                loadSensorsForLocation(location.siteId);
+            });
+        }
+
+        function loadSensorsForLocation(siteId) {
+            if (sensorCache[siteId]) {
+                displaySensorsForLocation(siteId, sensorCache[siteId]);
+                return;
+            }
+
+            $.ajax({
+                url: '/api/locations/' + siteId + '/sensors',
+                method: 'GET',
+                dataType: 'json',
+                success: function (sensors) {
+                    sensorCache[siteId] = sensors;
+                    displaySensorsForLocation(siteId, sensors);
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching sensors:', error);
                 }
             });
-        })
-        .catch(error => console.error('Error fetching sensor data:', error));
+        }
+
+        function displaySensorsForLocation(siteId, sensors) {
+            $.each(sensors, function (i, sensor) {
+                if (sensor.latitude === 0 && sensor.longitude === 0) return;
+
+                var sensorMarker = L.marker([sensor.latitude, sensor.longitude], {
+                    icon: L.divIcon({
+                        className: 'sensor-marker',
+                        html: '<div style="background-color: #3498db; width: 12px; height: 12px; border-radius: 50%;"></div>',
+                        iconSize: [12, 12]
+                    })
+                });
+
+                sensorMarker.bindPopup('<strong>' + sensor.name + '</strong><br>' +
+                    '<a href="/statistics/' + sensor.sensorId + '" ' +
+                    'class="btn btn-sm btn-info">View Statistics</a>');
+
+                sensorLayer.addLayer(sensorMarker);
+            });
+        }
+
+        map.on('zoomend', function () {
+            var currentZoom = map.getZoom();
+
+            if (currentZoom >= ZOOM_THRESHOLD) {
+                if (!map.hasLayer(sensorLayer)) {
+                    map.addLayer(sensorLayer);
+                    showSensorsInView();
+                }
+
+            } else {
+                if (map.hasLayer(sensorLayer)) {
+                    map.removeLayer(sensorLayer);
+                }
+            }
+        });
+
+        map.on('moveend', function () {
+            if (map.getZoom() >= ZOOM_THRESHOLD && map.hasLayer(sensorLayer)) {
+                sensorLayer.clearLayers();
+                showSensorsInView();
+            }
+        });
+
+        $('<style>')
+            .text(`
+    .sensor-marker {
+        background: transparent;
+        border: none;
+    }
+    .subtle-location-marker {
+        background: transparent;
+        border: none;
+    }
+    `)
+            .appendTo('head');
+    });
 </script>

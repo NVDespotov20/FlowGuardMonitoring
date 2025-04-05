@@ -12,27 +12,103 @@
         var siteCoordinates = [
             @foreach (var site in ViewBag.Sites as List<SiteSelectListItem> ?? new List<SiteSelectListItem>())
             {
-                @:{ value: "@site.Value", latitude: @site.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture), longitude: @site.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture) },
+                @:{ value: "@site.Value", name: "@site.Text", latitude: @site.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture), longitude: @site.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture) },
             }
         ];
 
-        // Function to update coordinates based on selected site
-        function updateCoordinates() {
+        // Initialize map
+        var map = L.map('sensor-location-map');
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Initialize marker variable
+        var marker = null;
+
+        // Function to update map based on selected site
+        function updateMapForSite() {
             var selectedSiteValue = $("#siteDropdown").val();
             var selectedSite = siteCoordinates.find(function(site) {
                 return site.value === selectedSiteValue;
             });
 
-            if (selectedSite) {
-                $("#Latitude").val(selectedSite.latitude);
-                $("#Longitude").val(selectedSite.longitude);
+            if (selectedSite && selectedSite.latitude && selectedSite.longitude) {
+                // Set map position
+                var latlng = [selectedSite.latitude, selectedSite.longitude];
+
+                // Set map view to appropriate zoom level
+                map.setView(latlng, 18);
+
+                // Create initial marker if it doesn't exist
+                if (!marker) {
+                    marker = L.marker(latlng, { draggable: true }).addTo(map);
+
+                    // Set initial form values
+                    $("#Latitude").val(selectedSite.latitude);
+                    $("#Longitude").val(selectedSite.longitude);
+
+                    // Add event listener for when marker is dragged
+                    marker.on('dragend', function() {
+                        var newPos = marker.getLatLng();
+                        $("#Latitude").val(newPos.lat.toFixed(6));
+                        $("#Longitude").val(newPos.lng.toFixed(6));
+                    });
+
+                    // Set marker popup
+                    marker.bindPopup("<strong>Sensor Location</strong><br>Drag or click on map to adjust").openPopup();
+                }
+            } else {
+                // Reset map view to world view
+                map.setView([0, 0], 1);
+
+                // Clear form fields
+                $("#Latitude").val("");
+                $("#Longitude").val("");
+
+                // Remove marker if exists
+                if (marker) {
+                    map.removeLayer(marker);
+                    marker = null;
+                }
             }
         }
 
-        // Update coordinates when page loads
-        updateCoordinates();
+        // When user clicks on map
+        map.on('click', function(e) {
+            var clickPos = e.latlng;
 
-        // Update coordinates when site selection changes
-        $("#siteDropdown").change(updateCoordinates);
+            // Update form values with clicked position
+            $("#Latitude").val(clickPos.lat.toFixed(6));
+            $("#Longitude").val(clickPos.lng.toFixed(6));
+
+            // Update or create marker at clicked position
+            if (marker) {
+                marker.setLatLng(clickPos);
+            } else {
+                marker = L.marker(clickPos, { draggable: true }).addTo(map);
+
+                // Add event listener for when marker is dragged
+                marker.on('dragend', function() {
+                    var newPos = marker.getLatLng();
+                    $("#Latitude").val(newPos.lat.toFixed(6));
+                    $("#Longitude").val(newPos.lng.toFixed(6));
+                });
+            }
+
+            // Update popup
+            marker.bindPopup("<strong>Sensor Location</strong><br>Coordinates: " +
+                clickPos.lat.toFixed(6) + ", " + clickPos.lng.toFixed(6)).openPopup();
+        });
+
+        // Update map when page loads
+        updateMapForSite();
+
+        // Update map when site selection changes
+        $("#siteDropdown").change(function() {
+            // Don't reset marker position on site change, just update the view
+            updateMapForSite();
+        });
     });
 </script>

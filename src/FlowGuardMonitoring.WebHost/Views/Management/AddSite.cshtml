@@ -3,6 +3,7 @@
 @{
     ViewData["ScriptPath"] = "/Management/Partials/AddSiteScript";
     ViewData["ScriptModel"] = Model;
+    ViewData["Map"] = true;
 }
 
 <div class="container py-4">
@@ -44,10 +45,10 @@
                                 <div class="card-footer bg-light py-2 px-3">
                                     <div class="d-flex align-items-center">
                                         <div class="me-auto small text-muted">
-                                            <i class="bi bi-info-circle me-1"></i> Click on the map to set the location or search for an address
+                                            <i class="fas fa-info-circle me-1"></i> Click on the map to set the location or search for an address
                                         </div>
                                         <button type="button" class="btn btn-sm btn-outline-secondary" id="resetMapButton">
-                                            <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                            Reset
                                         </button>
                                     </div>
                                 </div>
@@ -61,7 +62,7 @@
                                     <div class="input-group">
                                         <input type="text" id="searchInput" class="form-control" placeholder="Enter address to search">
                                         <button class="btn btn-outline-secondary" type="button" id="searchButton">
-                                            <i class="bi bi-search"></i>
+                                            <i class="fas fa-magnifying-glass"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -109,30 +110,16 @@
                     </ul>
                     <hr>
                     <p class="small text-muted mb-0">
-                        <i class="bi bi-info-circle me-2"></i> All fields are required for successful registration.
+                        <i class="fas fa-info-circle me-2"></i> All fields are required for successful registration.
                     </p>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Leaflet CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-      crossorigin=""/>
-<!-- Leaflet Geocoder CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 <style>
     .leaflet-control-geocoder {
         width: 100%;
         max-width: 400px;
     }
 </style>
-
-<!-- Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-        crossorigin=""></script>
-<!-- Leaflet Geocoder -->
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
