@@ -132,6 +132,7 @@ public class AuthenticationController : Controller
         if (!result.Succeeded)
         {
             this.ModelState.AssignIdentityErrors(result.Errors);
+            return this.View(model);
         }
 
         var emailVerificationToken = await this.userManager.GenerateEmailConfirmationTokenAsync(user);

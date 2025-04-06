@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using FlowGuardMonitoring.BLL.Models;
 using FlowGuardMonitoring.DAL.Models;
 using FlowGuardMonitoring.DAL.Repositories;
 using Microsoft.IdentityModel.Tokens;
@@ -28,6 +30,17 @@ public class StatisticsService
     public int GetMeasurementsCount(string userId)
     {
         return this.measurementRepository.GetCount(userId, string.Empty);
+    }
+
+    public MeasurementStatistics CalculateStatistics(List<MeasurementExportViewModel> data)
+    {
+        return new MeasurementStatistics
+        {
+            Latest = (float)data.Last().RawValue,
+            Average = (float)data.Average(m => m.RawValue),
+            Min = (float)data.Min(m => m.RawValue),
+            Max = (float)data.Max(m => m.RawValue),
+        };
     }
 
     public async Task<List<Measurement>> GetMeasurementsGrouped(string userId, int sensorId, string timeframe)

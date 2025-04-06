@@ -34,6 +34,7 @@ public class Program
         builder.Services.AddScoped<IPaginationService<Measurement>, PaginationService<Measurement>>();
         builder.Services.AddScoped<IPaginationService<Notification>, PaginationService<Notification>>();
         builder.Services.AddScoped<StatisticsService>();
+        builder.Services.AddScoped<ExportService>();
 
         builder.Services.AddHttpClient("MeasurementApi", client =>
         {

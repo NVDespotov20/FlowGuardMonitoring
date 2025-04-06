@@ -20,6 +20,15 @@
       time_24hr: true
     });
 
+    // Add event listeners for export buttons
+    document.getElementById('exportPdfBtn').addEventListener('click', () => {
+      exportData('pdf');
+    });
+
+    document.getElementById('exportExcelBtn').addEventListener('click', () => {
+      exportData('excel');
+    });
+
     // Initialize time range buttons
     document.getElementById('timeRangeDay').addEventListener('click', () => {
       setTimeRange(1);
@@ -35,6 +44,31 @@
 
     getChart();
   });
+
+  function exportData(format) {
+    const sensorId = document.getElementById('sensorId').value;
+    const startDate = document.getElementById('startDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    if (!sensorId || !startDate || !endDate) {
+      alert('Please set date range and fetch data before exporting.');
+      return;
+    }
+
+    // Show loading indicator
+    document.getElementById('loadingOverlay').classList.remove('d-none');
+
+    // Create export URL
+    const exportUrl = `/statistics/${sensorId}/export/${format}?startDate=${encodeURIComponent(startDate)}&endDate=${encodeURIComponent(endDate)}`;
+
+    // For PDF and Excel, we'll use a direct download approach
+    window.location.href = exportUrl;
+
+    // Hide loading overlay after a short delay (since the browser will handle the download)
+    setTimeout(() => {
+      document.getElementById('loadingOverlay').classList.add('d-none');
+    }, 1000);
+  }
 
   function setTimeRange(days) {
     const endDate = new Date();

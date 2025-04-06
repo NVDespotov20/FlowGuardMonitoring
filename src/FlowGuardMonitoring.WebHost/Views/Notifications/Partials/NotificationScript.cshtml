@@ -27,22 +27,27 @@
                     "data": "type",
                     "render": function (data, type, row) {
                         let icon = '';
+                        let textColor = '';
                         switch (data) {
                             case 'Warning': 
                                 icon = 'fa-triangle-exclamation';
+                                textColor = 'warning';
                                 break;
                             case 'Critical':
                                 icon = 'fa-radiation';
+                                textColor = 'danger';
                                 break;
                             case 'Error':
                                 icon = 'fa-circle-xmark';
+                                textColor = 'danger';
                                 break;
                             case 'Info':
                                 icon = 'fa-info-circle';
+                                textColor = 'info';
                                 break;
                         }
                         return `<div>
-                                    <i class="fa notif-icon ${icon} fa-3x"></i>
+                                    <i class="fas text-${textColor} ${icon} fa-3x"></i>
                                 </div>`;
                     }
                 },
@@ -67,9 +72,6 @@
                     "visible": false
                 }
             ],
-            "createdRow": function(row, data, dataIndex) {
-                $(row).addClass('notif-'+data.type.toLowerCase());
-            }
         });
         $('#notificationsTable tbody').on('click', 'tr', function () {
             var row = table.row(this);
